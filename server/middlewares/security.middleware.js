@@ -1,6 +1,8 @@
 // Modules
 const mongoSanitize = require("express-mongo-sanitize");
 
+// -----------------------------IMPORTS---------------------------------------
+
 // Middleware for sanitize requests
 const mongoSanitizeMiddleware = (req, res, next) => {
     const options = { replaceWith: "_" };

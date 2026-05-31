@@ -14,6 +14,8 @@ const { registerSchema, loginSchema } = require("../validations/auth.validation"
 // Rate limiters
 const { registerLimiter, loginLimiter, verifyLimiter } = require("../middlewares/ratelimiters/auth.limiter");
 
+// -----------------------------IMPORTS---------------------------------------
+
 const authRouter = express.Router();
 
 // Route to register new user

@@ -6,7 +6,9 @@ const jwt = require("jsonwebtoken");
 // Utils
 const sendMail = require("../utils/email");
 
-// User Schema
+// -----------------------------IMPORTS---------------------------------------
+
+// Schema for user model
 const userSchema = new mongoose.Schema({
     fullname: {
         type: String,
@@ -59,6 +61,9 @@ userSchema.methods.sendVerificationLink = async function() {
 
     sendMail(this.email, "Verification Link", html);
 };
+
+// Indexing
+userSchema.index({ isVerified: 1 });
 
 const User = mongoose.model("Users", userSchema);
 

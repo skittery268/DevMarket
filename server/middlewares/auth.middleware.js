@@ -8,15 +8,17 @@ const catchAsync = require("../utils/catchAsync");
 // Modules
 const jwt = require("jsonwebtoken");
 
+// -----------------------------IMPORTS---------------------------------------
+
 // Middleware function to verification user pre request
 const protect = catchAsync(async (req, res, next) => {
-    const { token } = req.cookies;
+    const { authToken } = req.cookies;
 
-    if (!token) {
+    if (!authToken) {
         return next(new AppError("Token not found!", 404));
     }
 
-    const payload = await jwt.verify(token, process.env.JWT_SECRET);
+    const payload = await jwt.verify(authToken, process.env.JWT_SECRET);
 
     if (!payload) {
         return next(new AppError("Invalid Token!", 400));

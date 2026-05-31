@@ -1,5 +1,9 @@
+// Utils
 const AppError = require("../utils/appError");
 
+// -----------------------------IMPORTS---------------------------------------
+
+// Middleware function to check request body
 const validate = (schema) => {
     return (req, res, next) => {
         const result = schema.safeParse(req.body);

@@ -8,8 +8,10 @@ const catchAsync = require("../utils/catchAsync");
 // Modules
 const jwt = require("jsonwebtoken");
 
+// -----------------------------IMPORTS---------------------------------------
+
 // Function to create and send token to auto login user
-const createAndSendToken = async (res, user) => {
+const createAndSendToken = catchAsync(async (res, user, next) => {
     const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
 
     res.cookie("authToken", token, {
@@ -28,7 +30,7 @@ const createAndSendToken = async (res, user) => {
             user
         }
     });
-};
+});
 
 // Controller to register new user
 const register = catchAsync(async (req, res, next) => {

@@ -1,5 +1,9 @@
+// Modules
 const { z } = require("zod");
 
+// -----------------------------IMPORTS---------------------------------------
+
+// Schema for validate register request body
 const registerSchema = z.object({
     fullname: z
         .string()
@@ -20,6 +24,7 @@ const registerSchema = z.object({
 
 }).strict({ message: "Unknown fields are not allowed!" });
 
+// Schema for validate loigin request body
 const loginSchema = z.object({
     email: z
         .string()

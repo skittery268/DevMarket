@@ -20,6 +20,9 @@ const connectDB = require("./configs/mongo.config");
 
 // Routers
 const authRouter = require("./routers/auth.router");
+const categoryRouter = require("./routers/category.router");
+
+// -----------------------------IMPORTS---------------------------------------
 
 const app = express();
 
@@ -41,6 +44,7 @@ app.use(globalLimiter);
 
 // Controllers
 app.use("/api/auth", authRouter);
+app.use("/api/category", categoryRouter);
 
 // Global Error handler
 app.use(globalErrorHandler);
