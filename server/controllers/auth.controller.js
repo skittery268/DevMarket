@@ -8,11 +8,11 @@ const catchAsync = require("../utils/catchAsync");
 // Modules
 const jwt = require("jsonwebtoken");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Function to create and send token to auto login user
-const createAndSendToken = catchAsync(async (res, user, next) => {
-    const token = await jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
+const createAndSendToken = (res, user) => {
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
 
     res.cookie("authToken", token, {
         maxAge: process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
@@ -30,7 +30,7 @@ const createAndSendToken = catchAsync(async (res, user, next) => {
             user
         }
     });
-});
+};
 
 // Controller to register new user
 const register = catchAsync(async (req, res, next) => {
@@ -50,7 +50,7 @@ const register = catchAsync(async (req, res, next) => {
 const login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
         return next(new AppError("Credentials incorrect!", 400));
@@ -101,16 +101,37 @@ const verificationEmail = catchAsync(async (req, res, next) => {
 });
 
 // Controller to auto login
-const getMe = catchAsync(async (req, res, next) => {
+const getMe = (req, res) => {
     const { user } = req;
 
     res.status(200).json({
         status: "success",
         message: "Auto login successfully!",
-        message: {
+        data: {
             user
         }
     });
-});
+};
 
-module.exports = { register, login, verificationEmail, getMe };
+// Controller to logout user
+const logout = (req, res) => {
+    res.clearCookie("authToken", {
+        httpOnly: true,
+        secure: process.env.NODE_MODE === "dev" ? false : true,
+        sameSite: process.env.NODE_MODE === "dev" ? "Lax" : "Strict"
+    });
+
+    res.status(200).json({
+        status: "success",
+        message: "Logout successfully!"
+    });
+};
+
+// Controller for Google OAuth callback
+const googleCallback = (req, res) => {
+    const { user } = req;
+
+    createAndSendToken(res, user);
+};
+
+module.exports = { register, login, verificationEmail, getMe, logout, googleCallback };

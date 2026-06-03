@@ -1,7 +1,7 @@
 // Modules
 const mongoose = require("mongoose");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Config to connect db with server
 const connectDB = async () => {

@@ -1,7 +1,7 @@
 // Modules
 const cloudinary = require("cloudinary").v2;
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,

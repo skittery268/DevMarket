@@ -1,7 +1,7 @@
 // Modules
 const rateLimit = require("express-rate-limit");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Rate limiter for server (all routes) (200 requests / 15 min)
 const globalLimiter = rateLimit({

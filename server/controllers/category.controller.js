@@ -9,7 +9,7 @@ const uploadToCloudinary = require("../utils/uploadToCloudinary");
 // Configs
 const cloudinary = require("../configs/cloudinary.config");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Contoller to get categories
 const getCategories = catchAsync(async (req, res, next) => {

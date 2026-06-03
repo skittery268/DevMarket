@@ -1,7 +1,7 @@
 // Modules
 const { z } = require("zod");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Schema for validate register request body
 const registerSchema = z.object({

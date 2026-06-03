@@ -1,7 +1,7 @@
 // Modules
 const nodemailer = require("nodemailer");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Create transporter function with auth information to send messages in user email
 const transporter = nodemailer.createTransport({

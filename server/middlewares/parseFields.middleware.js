@@ -1,5 +1,5 @@
 // Middleware function to parse allowed attributes in requests
-const parseCategoryFields = (req, res, next) => {
+const parseFields = (req, res, next) => {
     if (req.body.allowedAttributes) {
         req.body.allowedAttributes = JSON.parse(req.body.allowedAttributes);
     }
@@ -7,4 +7,4 @@ const parseCategoryFields = (req, res, next) => {
     next();
 };
 
-module.exports = parseCategoryFields;
+module.exports = parseFields;

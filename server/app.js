@@ -3,6 +3,7 @@ require("dotenv").config();
 
 // Modules
 const express = require("express");
+const passport = require("passport");
 
 // Security
 const cookieParser = require("cookie-parser");
@@ -17,12 +18,14 @@ const globalErrorHandler = require("./controllers/error.controller");
 
 // Configs
 const connectDB = require("./configs/mongo.config");
+require("./configs/passport.config");
 
 // Routers
 const authRouter = require("./routers/auth.router");
 const categoryRouter = require("./routers/category.router");
+const productRouter = require("./routers/product.router");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 const app = express();
 
@@ -33,6 +36,7 @@ app.use(cors({
     origin: process.env.CLIENT_URL,
     credentials: true
 }));
+app.use(passport.initialize());
 
 // Security
 app.use(mongoSanitizeMiddleware);
@@ -43,12 +47,14 @@ app.use(helmet());
 app.use(globalLimiter);
 
 // Controllers
-app.use("/api/auth", authRouter);
-app.use("/api/category", categoryRouter);
+app.use("/api/v1/auth", authRouter);
+app.use("/api/v1/category", categoryRouter);
+app.use("/api/v1/product", productRouter);
 
 // Global Error handler
 app.use(globalErrorHandler);
 
+// Running server for listen requests and connect to database 
 app.listen(process.env.PORT, () => {
     console.log(`Server running on port ${process.env.PORT}`);
 

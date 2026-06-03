@@ -8,7 +8,7 @@ const catchAsync = require("../utils/catchAsync");
 // Modules
 const jwt = require("jsonwebtoken");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Middleware function to verification user pre request
 const protect = catchAsync(async (req, res, next) => {

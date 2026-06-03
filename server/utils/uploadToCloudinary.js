@@ -4,7 +4,7 @@ const streamifier = require("streamifier");
 // Configs
 const cloudinary = require("../configs/cloudinary.config")
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Function to upload images in cloudinary
 const uploadToCloudinary = (buffer, folder) => {

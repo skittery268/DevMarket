@@ -1,18 +1,18 @@
 // Modules
 const mongoose = require("mongoose");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Schema for category model
 const categorySchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, "Category name is required!"],
         unique: true
     },
     description: {
         type: String,
-        required: true
+        required: [true, "Category description is required!"]
     },
     image: {
         url: String,
@@ -24,7 +24,8 @@ const categorySchema = new mongoose.Schema({
     },
     parentCategory: {
         type: mongoose.Types.ObjectId,
-        default: null
+        default: null,
+        ref: "Category"
     },
     allowedAttributes: {
         type: [String]
@@ -32,7 +33,7 @@ const categorySchema = new mongoose.Schema({
 }, { timestamps: true });
 
 // Indexing
-categorySchema.index({ isActive: 1 });
+categorySchema.index({ parentCategory: 1, isActive: 1 });
 
 const Category = mongoose.model("Category", categorySchema);
 

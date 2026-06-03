@@ -1,7 +1,7 @@
 // Modules
 const { z } = require("zod");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Schema for validate create category requests body
 const createCategorySchema = z.object({

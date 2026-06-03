@@ -1,7 +1,7 @@
 // Modules
 const rateLimit = require("express-rate-limit");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Rate limiter for register route (5 requests / 60 min)
 const registerLimiter = rateLimit({

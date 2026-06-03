@@ -1,7 +1,7 @@
 // Utils
 const AppError = require("../utils/appError")
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Middleware function to check user access
 const allowedTo = (...roles) => {

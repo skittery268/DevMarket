@@ -9,7 +9,7 @@ const { protect } = require("../middlewares/auth.middleware");
 const allowedTo = require("../middlewares/allowedTo.middleware");
 const validate = require("../middlewares/validate.middleware");
 const upload = require("../middlewares/upload.middleware");
-const parseCategoryFields = require("../middlewares/parseCategoryFields.middleware");
+const parseFields = require("../middlewares/parseFields.middleware");
 
 // Validations
 const { createCategorySchema, editCategorySchema } = require("../validations/category.validation");
@@ -17,7 +17,7 @@ const { createCategorySchema, editCategorySchema } = require("../validations/cat
 // Rate limiters
 const { createCategoryLimiter, editCategoryLimiter, deleteCategoryLimiter } = require("../middlewares/ratelimiters/category.limiter");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 const categoryRouter = express.Router();
 
@@ -30,7 +30,7 @@ categoryRouter.post(
     protect, 
     allowedTo("admin"),
     upload.single("image"),
-    parseCategoryFields,
+    parseFields,
     validate(createCategorySchema),
     createCategory
 );
@@ -41,7 +41,7 @@ categoryRouter.patch(
     protect,
     allowedTo("admin"),
     upload.single("image"),
-    parseCategoryFields,
+    parseFields,
     validate(editCategorySchema),
     editCategory
 );

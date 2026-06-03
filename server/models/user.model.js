@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // Utils
 const sendMail = require("../utils/email");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Schema for user model
 const userSchema = new mongoose.Schema({
@@ -21,7 +21,8 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, "User password is required"]
+        required: [function () { return this.provider === "local" }, "User password is required"],
+        select: false
     },
     role: {
         type: String,
@@ -34,6 +35,16 @@ const userSchema = new mongoose.Schema({
     },
     avatar: {
         type: String
+    },
+    googleId: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    provider: {
+        type: String,
+        enum: ["local", "google"],
+        default: "local"
     }
 }, { timestamps: true });
 

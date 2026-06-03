@@ -1,7 +1,7 @@
 // Modules
 const mongoSanitize = require("express-mongo-sanitize");
 
-// -----------------------------IMPORTS---------------------------------------
+// ---------------------------------------IMPORTS---------------------------------------
 
 // Middleware for sanitize requests
 const mongoSanitizeMiddleware = (req, res, next) => {
