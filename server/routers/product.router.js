@@ -23,12 +23,14 @@ const productRouter = express.Router();
 
 // Route to get products by query (page, limit)
 productRouter.get("/", getProducts);
+
+// Middlewares
+productRouter.use(protect, allowedTo("seller", "admin"));
+
 // Route to create new product
 productRouter.post(
     "/createProduct/:categoryId",
     createProductLimiter,
-    protect,
-    allowedTo("seller", "admin"),
     upload.array("images", 5),
     parseFields,
     validate(createProductSchema),
@@ -38,8 +40,6 @@ productRouter.post(
 productRouter.patch(
     "/editproduct/:productId",
     editProductLimiter,
-    protect,
-    allowedTo("seller", "admin"),
     upload.array("images", 5),
     parseFields,
     validate(editProductSchema),
@@ -49,8 +49,6 @@ productRouter.patch(
 productRouter.delete(
     "/deleteproduct/:productId",
     deleteProductLimiter,
-    protect,
-    allowedTo("seller", "admin"),
     deleteProduct
 );
 

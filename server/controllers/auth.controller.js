@@ -32,11 +32,16 @@ const createAndSendToken = (res, user) => {
     });
 };
 
+// Function to capitalize user name
+const formatName = (name) => name[0].toUpperCase() + name.slice(1).toLowerCase();
+
 // Controller to register new user
 const register = catchAsync(async (req, res, next) => {
     const { fullname, email, password } = req.body;
 
-    const user = await User.create({ fullname, email, password });
+    const formatedName = formatName(fullname);
+
+    const user = await User.create({ fullname: formatedName, email, password });
 
     await user.sendVerificationLink();
 

@@ -1,9 +1,11 @@
-// Injected envairoment variabels in env section
+// Injected envairoment variabels in process.env section
 require("dotenv").config();
 
 // Modules
 const express = require("express");
 const passport = require("passport");
+const http = require("http");
+const { Server } = require("socket.io");
 
 // Security
 const cookieParser = require("cookie-parser");
@@ -18,16 +20,28 @@ const globalErrorHandler = require("./controllers/error.controller");
 
 // Configs
 const connectDB = require("./configs/mongo.config");
+const activateSocket = require("./configs/socket.config");
 require("./configs/passport.config");
 
 // Routers
 const authRouter = require("./routers/auth.router");
 const categoryRouter = require("./routers/category.router");
 const productRouter = require("./routers/product.router");
+const searchRouter = require("./routers/search.router");
+const chatRouter = require("./routers/chat.router");
+const messageRouter = require("./routers/message.router");
 
 // ---------------------------------------IMPORTS---------------------------------------
 
+// Servers
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+    cors: {
+        origin: process.env.CLIENT_URL,
+        credentials: true
+    }
+});
 
 // Middlewares
 app.use(express.json());
@@ -37,6 +51,10 @@ app.use(cors({
     credentials: true
 }));
 app.use(passport.initialize());
+app.use((req, res, next) => {
+    req.io = io;
+    next();
+});
 
 // Security
 app.use(mongoSanitizeMiddleware);
@@ -50,13 +68,19 @@ app.use(globalLimiter);
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/product", productRouter);
+app.use("/api/v1/search", searchRouter);
+app.use("/api/v1/chat", chatRouter);
+app.use("/api/v1/message", messageRouter);
 
 // Global Error handler
 app.use(globalErrorHandler);
 
+// Socket io
+activateSocket(io);
+
 // Running server for listen requests and connect to database 
-app.listen(process.env.PORT, () => {
-    console.log(`Server running on port ${process.env.PORT}`);
+server.listen(process.env.PORT, () => {
+    console.log(`Server running on port ${process.env.PORT}!`);
 
     connectDB();
 });

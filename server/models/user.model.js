@@ -12,7 +12,8 @@ const sendMail = require("../utils/email");
 const userSchema = new mongoose.Schema({
     fullname: {
         type: String,
-        required: [true, "User name is required!"]
+        required: [true, "User name is required!"],
+        trim: true
     },
     email: {
         type: String,

@@ -1,5 +1,6 @@
 // Modules
 const express = require("express");
+const passport = require("passport");
 
 // Controllers
 const { register, login, verificationEmail, getMe, logout, googleCallback } = require("../controllers/auth.controller");

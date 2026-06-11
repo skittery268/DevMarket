@@ -1,6 +1,8 @@
 // Modules
 const mongoose = require('mongoose');
 
+// ---------------------------------------IMPORTS---------------------------------------
+
 // Schema for product model
 const productSchema = new mongoose.Schema({
     universal: {

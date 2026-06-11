@@ -23,12 +23,13 @@ const categoryRouter = express.Router();
 
 // Route to get categories by query (page, limit)
 categoryRouter.get("/", getCategories);
+
+categoryRouter.use(protect, allowedTo("admin"));
+
 // Route to create new category
 categoryRouter.post(
     "/createcategory", 
     createCategoryLimiter, 
-    protect, 
-    allowedTo("admin"),
     upload.single("image"),
     parseFields,
     validate(createCategorySchema),
@@ -38,8 +39,6 @@ categoryRouter.post(
 categoryRouter.patch(
     "/editcategory/:id",
     editCategoryLimiter,
-    protect,
-    allowedTo("admin"),
     upload.single("image"),
     parseFields,
     validate(editCategorySchema),
@@ -49,8 +48,6 @@ categoryRouter.patch(
 categoryRouter.delete(
     "/deletecategory/:id",
     deleteCategoryLimiter,
-    protect,
-    allowedTo("admin"),
     deleteCategory
 );
 

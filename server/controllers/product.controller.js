@@ -14,7 +14,12 @@ const uploadToCloudinary = require("../utils/uploadToCloudinary");
 const getProducts = catchAsync(async (req, res, next) => {
     const { page, limit } = req.query;
 
-    const products = await Product.find().skip((page - 1) * limit).limit(limit);
+    const products = await Product.find()
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate(["universal.category", "universal.sellerId", "universal.comments", "universal.reviews"])
+        .lean();
 
     const productCount = await Product.countDocuments();
 
@@ -77,6 +82,8 @@ const createProduct = catchAsync(async (req, res, next) => {
         },
         attributes: req.body.attributes
     });
+
+    await product.populate(["universal.category", "universal.sellerId"]);
 
     res.status(201).json({
         status: "success",
@@ -154,6 +161,7 @@ const editProduct = catchAsync(async (req, res, next) => {
     }
 
     await product.save();
+    await product.populate(["universal.category", "universal.sellerId"]);
 
     res.status(200).json({
         status: "success",

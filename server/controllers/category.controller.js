@@ -15,7 +15,12 @@ const cloudinary = require("../configs/cloudinary.config");
 const getCategories = catchAsync(async (req, res, next) => {
     const { page, limit } = req.query;
 
-    const categories = await Category.find().skip((page - 1) * limit).limit(limit);
+    const categories = await Category.find()
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate("parentCategory")
+        .lean();
 
     const categoryCount = await Category.countDocuments();
 
@@ -42,6 +47,8 @@ const createCategory = catchAsync(async (req, res, next) => {
     }
 
     const category = await Category.create({ name, description, allowedAttributes, image, parentCategory });
+
+    await category.populate("parentCategory");
 
     res.status(201).json({
         status: "success",
@@ -103,6 +110,8 @@ const editCategory = catchAsync(async (req, res, next) => {
     if (parentCategory) category.parentCategory = parentCategory;
 
     await category.save();
+
+    await category.populate("parentCategory");
 
     res.status(200).json({
         status: "success",
