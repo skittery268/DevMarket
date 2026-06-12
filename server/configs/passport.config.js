@@ -25,7 +25,7 @@ passport.use(
                     if (!user) {
                         user = await User.create({
                             googleId: profile.id,
-                            name: profile.displayName,
+                            fullname: profile.displayName,
                             email: profile.emails[0].value,
                             isVerified: true,
                             provider: "google"
@@ -34,13 +34,13 @@ passport.use(
                         user.googleId = profile.id;
                         user.provider = "google";
                         await user.save();
-                    }
-                }
+                    };
+                };
 
                 done(null, user);
             } catch (error) {
                 done(error );
-            }
+            };
         }
     )
-)
+);

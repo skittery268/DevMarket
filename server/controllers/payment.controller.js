@@ -93,8 +93,8 @@ const createCheckoutSession = catchAsync(async (req, res, next) => {
         payment_intent_data: {
             transfer_group: transferGroup
         },
-        success_url: "http://localhost:3000/success",
-        cancel_url: "http://localhost:3000/cancel"
+        success_url: process.env.STRIPE_SUCCESS_URL,
+        cancel_url: process.env.STRIPE_CANCEL_URL
     });
 
     const payment = await Payment.create({

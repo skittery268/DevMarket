@@ -1,47 +1,45 @@
+// Modules
 const mongoose = require("mongoose");
 
+// ---------------------------------------IMPORTS---------------------------------------
+
+// Schema for payment model
 const paymentSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: [true, "User id is required"],
     },
-
     stripeSessionId: {
         type: String,
         unique: true,
         sparse: true,
     },
-
     stripePaymentIntentId: {
         type: String,
         unique: true,
         sparse: true,
     },
-
     totalAmount: {
         type: Number,
         required: [true, "Total amount of products is requried"]
     },
-
-    stripeCustomerId: { type: String },
-
+    stripeCustomerId: { 
+        type: String 
+    },
     transferGroup: {
         type: String
     },
-
     platformCommission: {
         type: Number,
         required: [true, "Platform commission is required"],
         default: 0
     },
-
     sellerNetAmount: {
         type: Number,
         required: [true, "Seller net amount is required"],
         default: 0
     },
-
     sellerDistributions: [
         {
             productId: {
@@ -76,7 +74,6 @@ const paymentSchema = new mongoose.Schema({
             }
         }
     ],
-
     sellerTransfers: [
         {
             sellerId: {
@@ -103,18 +100,19 @@ const paymentSchema = new mongoose.Schema({
             }
         }
     ],
-
     status: {
         type: String,
         required: [true, "Payment status is required"],
         enum: ["pending", "succeeded", "failed", "canceled"],
         default: "pending"
     },
-
-    webhookProcessed: {type: Boolean, default: false}
-
+    webhookProcessed: {
+        type: Boolean, 
+        default: false
+    }
 }, { timestamps: true });
 
+// Indexing
 paymentSchema.index({status: 1});
 
 const Payment = mongoose.model("Payment", paymentSchema);

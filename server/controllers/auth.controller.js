@@ -140,7 +140,18 @@ const logout = (req, res) => {
 const googleCallback = (req, res) => {
     const { user } = req;
 
-    createAndSendToken(res, user);
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES });
+
+    res.cookie("authToken", token, {
+        maxAge: process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_MODE === "dev" ? false : true,
+        sameSite: process.env.NODE_MODE === "dev" ? "Lax" : "Strict"
+    });
+
+    user.password = undefined;
+
+    res.redirect(process.env.CLIENT_URL);
 };
 
 module.exports = { register, login, verificationEmail, getMe, logout, googleCallback };
