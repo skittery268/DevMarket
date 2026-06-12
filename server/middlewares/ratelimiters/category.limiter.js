@@ -10,6 +10,10 @@ const createCategoryLimiter = rateLimit({
     standardHeaders: 'draft-8', 
     legacyHeaders: false, 
     ipv6Subnet: 56, 
+    message: {
+        status: "fail",
+        message: "Too many create requests. Please try again later.",
+    }
 });
 
 // Rate limiter for edit category route (50 requests / 15 min)
@@ -19,6 +23,10 @@ const editCategoryLimiter = rateLimit({
     standardHeaders: 'draft-8', 
     legacyHeaders: false, 
     ipv6Subnet: 56, 
+    message: {
+        status: "fail",
+        message: "Too many edit requests. Please try again later.",
+    }
 });
 
 // Rate limiter for delete category route (10 requests / 15 min)
@@ -28,6 +36,10 @@ const deleteCategoryLimiter = rateLimit({
     standardHeaders: 'draft-8', 
     legacyHeaders: false, 
     ipv6Subnet: 56, 
+    message: {
+        status: "fail",
+        message: "Too many delete requests. Please try again later.",
+    }
 });
 
 module.exports = { createCategoryLimiter, editCategoryLimiter, deleteCategoryLimiter };

@@ -9,6 +9,10 @@ const createChatLimiter = rateLimit({
     standardHeaders: 'draft-8', 
     legacyHeaders: false, 
     ipv6Subnet: 56, 
+    message: {
+        status: "fail",
+        message: "Too many create requests. Please try again later.",
+    }
 });
 
 // Rate limiter for delete chat route (20 requests / 1 hour)
@@ -18,6 +22,10 @@ const deleteChatLimiter = rateLimit({
     standardHeaders: 'draft-8', 
     legacyHeaders: false, 
     ipv6Subnet: 56, 
+    message: {
+        status: "fail",
+        message: "Too many edit requests. Please try again later.",
+    }
 });
 
 module.exports = { createChatLimiter, deleteChatLimiter };

@@ -10,6 +10,10 @@ const registerLimiter = rateLimit({
 	standardHeaders: 'draft-8', 
 	legacyHeaders: false, 
 	ipv6Subnet: 56, 
+	message: {
+        status: "fail",
+        message: "Too many register requests. Please try again later.",
+    }
 });
 
 // Rate limiter for login route (5 requests / 15 min)
@@ -19,6 +23,10 @@ const loginLimiter = rateLimit({
 	standardHeaders: 'draft-8', 
 	legacyHeaders: false, 
 	ipv6Subnet: 56, 
+	message: {
+        status: "fail",
+        message: "Too many login requests. Please try again later.",
+    }
 });
 
 // Rate limiter for verify route (3 requests / 10 min)
@@ -28,6 +36,10 @@ const verifyLimiter = rateLimit({
 	standardHeaders: 'draft-8', 
 	legacyHeaders: false, 
 	ipv6Subnet: 56, 
+	message: {
+        status: "fail",
+        message: "Too many verify requests. Please try again later.",
+    }
 });
 
 module.exports = { registerLimiter, loginLimiter, verifyLimiter }

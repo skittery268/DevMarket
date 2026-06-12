@@ -10,6 +10,10 @@ const globalLimiter = rateLimit({
 	standardHeaders: 'draft-8', 
 	legacyHeaders: false, 
 	ipv6Subnet: 56, 
+	message: {
+        status: "fail",
+        message: "Too many requests. Please try again later.",
+    }
 });
 
 module.exports = globalLimiter;

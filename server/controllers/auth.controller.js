@@ -67,6 +67,10 @@ const login = catchAsync(async (req, res, next) => {
         return next(new AppError("Credentials incorrect!", 400));
     }
 
+    if (user.isDeleted) {
+        return next(new AppError("This account has been deleted!", 401));
+    }
+
     if (!user.isVerified) {
         return next(new AppError("Please complete verification first.", 400));
     }

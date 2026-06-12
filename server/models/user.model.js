@@ -35,7 +35,8 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     avatar: {
-        type: String
+        url: String,
+        public_id: String
     },
     googleId: {
         type: String,
@@ -46,6 +47,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["local", "google"],
         default: "local"
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false
+    },
+    deletedAt: {
+        type: Date,
+        default: null
     }
 }, { timestamps: true });
 

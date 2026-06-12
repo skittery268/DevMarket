@@ -44,7 +44,7 @@ const createCategory = catchAsync(async (req, res, next) => {
     const image = {
         url: result.secure_url,
         public_id: result.public_id
-    }
+    };
 
     const category = await Category.create({ name, description, allowedAttributes, image, parentCategory });
 
@@ -94,7 +94,7 @@ const editCategory = catchAsync(async (req, res, next) => {
     }
 
     if (file) {
-        const result = await uploadToCloudinary(req.file.buffer, "categoryImages");
+        const result = await uploadToCloudinary(file.buffer, "categoryImages");
 
         const image = {
             url: result.secure_url,

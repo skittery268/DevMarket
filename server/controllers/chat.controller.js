@@ -20,6 +20,7 @@ const getChats = catchAsync(async (req, res, next) => {
 
     res.status(200).json({
         status: "success",
+        message: "Chats returned successfully!",
         data: {
             chats
         }
@@ -44,6 +45,7 @@ const createChat = catchAsync(async (req, res, next) => {
 
     res.status(201).json({
         status: "success",
+        message: "Chat created successfully!",
         data: {
             chat
         }

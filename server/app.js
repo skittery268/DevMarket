@@ -30,6 +30,7 @@ const productRouter = require("./routers/product.router");
 const searchRouter = require("./routers/search.router");
 const chatRouter = require("./routers/chat.router");
 const messageRouter = require("./routers/message.router");
+const userRouter = require("./routers/user.router");
 
 // ---------------------------------------IMPORTS---------------------------------------
 
@@ -71,6 +72,7 @@ app.use("/api/v1/product", productRouter);
 app.use("/api/v1/search", searchRouter);
 app.use("/api/v1/chat", chatRouter);
 app.use("/api/v1/message", messageRouter);
+app.use("/api/v1/user", userRouter);
 
 // Global Error handler
 app.use(globalErrorHandler);

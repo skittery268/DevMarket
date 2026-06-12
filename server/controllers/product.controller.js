@@ -1,5 +1,4 @@
 // Models
-const cloudinary = require("../configs/cloudinary.config");
 const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 
@@ -7,6 +6,9 @@ const Product = require("../models/product.model");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const uploadToCloudinary = require("../utils/uploadToCloudinary");
+
+// Configs
+const cloudinary = require("../configs/cloudinary.config");
 
 // ---------------------------------------IMPORTS---------------------------------------
 
