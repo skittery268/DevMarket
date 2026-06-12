@@ -6,7 +6,7 @@ const passport = require("passport");
 const { register, login, verificationEmail, getMe, logout, googleCallback } = require("../controllers/auth.controller");
 
 // Middlewares
-const { protect } = require("../middlewares/auth.middleware");
+const protect = require("../middlewares/auth.middleware");
 const validate = require("../middlewares/validate.middleware");
 
 // Validations

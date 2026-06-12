@@ -5,7 +5,7 @@ const express = require('express');
 const { getChats, createChat, deleteChat } = require('../controllers/chat.controller');
 
 // Middlewares
-const { protect } = require('../middlewares/auth.middleware');
+const protect = require('../middlewares/auth.middleware');
 const validate = require('../middlewares/validate.middleware');
 const { createChatLimiter, deleteChatLimiter } = require('../middlewares/ratelimiters/chat.limiter');
 

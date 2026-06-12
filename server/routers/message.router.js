@@ -5,7 +5,7 @@ const express = require("express");
 const { getMessages, sendMessage, deleteMessage, editMessage } = require("../controllers/message.controller");
 
 // Middlewares
-const { protect } = require("../middlewares/auth.middleware");
+const protect = require("../middlewares/auth.middleware");
 
 // ---------------------------------------IMPORTS---------------------------------------
 

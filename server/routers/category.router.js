@@ -5,7 +5,7 @@ const express = require("express");
 const { getCategories, createCategory, editCategory, deleteCategory } = require("../controllers/category.controller");
 
 // Middlewares
-const { protect } = require("../middlewares/auth.middleware");
+const protect = require("../middlewares/auth.middleware");
 const allowedTo = require("../middlewares/allowedTo.middleware");
 const validate = require("../middlewares/validate.middleware");
 const upload = require("../middlewares/upload.middleware");

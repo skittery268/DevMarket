@@ -31,6 +31,7 @@ const searchRouter = require("./routers/search.router");
 const chatRouter = require("./routers/chat.router");
 const messageRouter = require("./routers/message.router");
 const userRouter = require("./routers/user.router");
+const paymentRouter = require("./routers/payment.router");
 
 // ---------------------------------------IMPORTS---------------------------------------
 
@@ -57,6 +58,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use('/api/v1/payment/webhook', express.raw({ type: "application/json" }));
+
 // Security
 app.use(mongoSanitizeMiddleware);
 app.use(hpp());
@@ -73,6 +76,7 @@ app.use("/api/v1/search", searchRouter);
 app.use("/api/v1/chat", chatRouter);
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/payment", paymentRouter);
 
 // Global Error handler
 app.use(globalErrorHandler);

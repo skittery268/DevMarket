@@ -5,7 +5,7 @@ const express = require('express');
 const { getProducts, createProduct, editProduct, deleteProduct } = require('../controllers/product.controller');
 
 // Middlewares
-const { protect } = require('../middlewares/auth.middleware');
+const protect = require('../middlewares/auth.middleware');
 const allowedTo = require('../middlewares/allowedTo.middleware');
 const upload = require('../middlewares/upload.middleware');
 const parseFields = require('../middlewares/parseFields.middleware');
