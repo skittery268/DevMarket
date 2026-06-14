@@ -16,12 +16,11 @@ const { createChatSchema } = require('../validations/chat.validation');
 
 const chatRouter = express.Router();
 
-// Route to get all chats of the user
-chatRouter.get("/", getChats);
-
 // Middlewares
 chatRouter.use(protect);
 
+// Route to get all chats of the user
+chatRouter.get("/", getChats);
 // Route to create a new chat
 chatRouter.post("/", createChatLimiter, validate(createChatSchema), createChat);
 // Route to delete chat (and all its messages)

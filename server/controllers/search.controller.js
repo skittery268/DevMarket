@@ -35,7 +35,7 @@ const searchProducts = catchAsync(async (req, res, next) => {
         { "universal.title": { $regex: title, $options: "i" } },
         { "universal.description": { $regex: title, $options: "i" } }
     ] })
-        .populate(["universal.category", "universal.sellerId", "universal.comments", "universal.reviews"])
+        .populate(["universal.category", "universal.sellerId"])
         .lean();
 
     res.status(200).json({
