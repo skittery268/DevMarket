@@ -16,10 +16,12 @@ const createProductSchema = z.object({
         .min(10, { message: "Product description must contain at least 10 characters!" })
         .max(1000, { message: "Product description is too long!" }),
     price: z
+        .coerce
         .number()
         .positive({ message: "Product price must be a positive number!" })
         .min(1, { message: "Product price must be at least 1!" }),
     stock: z
+        .coerce
         .number()
         .positive({ message: "Product stock must be a positive number!" })
         .min(1, { message: "Product stock must be at least 1!" }),
@@ -44,11 +46,13 @@ const editProductSchema = z.object({
         .max(1000, { message: "Product description is too long!" })
         .optional(),
     price: z
+        .coerce
         .number()
         .positive({ message: "Product price must be a positive number!" })
         .min(1, { message: "Product price must be at least 1!" })
         .optional(),
     stock: z
+        .coerce
         .number()
         .positive({ message: "Product stock must be a positive number!" })
         .min(1, { message: "Product stock must be at least 1!" })

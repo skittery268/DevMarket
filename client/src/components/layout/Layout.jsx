@@ -1,0 +1,27 @@
+import { Outlet, useLocation } from "react-router";
+import { AnimatePresence } from "framer-motion";
+
+import Header from "./Header";
+import Footer from "./Footer";
+import PageTransition from "@/components/common/PageTransition";
+
+// App shell: sticky header, animated routed content, footer.
+function Layout() {
+  const location = useLocation();
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">
+        <AnimatePresence mode="wait">
+          <PageTransition key={location.pathname}>
+            <Outlet />
+          </PageTransition>
+        </AnimatePresence>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+export default Layout;

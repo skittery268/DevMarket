@@ -12,7 +12,10 @@ const Category = require("../models/category.model");
 const searchUsers = catchAsync(async (req, res, next) => {
     const { fullname } = req.query;
 
-    const users = await User.find({ name: { $regex: fullname, $options: "i" } });
+    const users = await User.find({
+        fullname: { $regex: fullname || "", $options: "i" },
+        isDeleted: { $ne: true }
+    });
 
     res.status(200).json({
         status: "success",

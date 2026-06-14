@@ -13,7 +13,8 @@ const cloudinary = require("../configs/cloudinary.config");
 
 // Contoller to get categories
 const getCategories = catchAsync(async (req, res, next) => {
-    const { page, limit } = req.query;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 100;
 
     const categories = await Category.find()
         .sort({ createdAt: -1 })

@@ -14,13 +14,14 @@ const cloudinary = require("../configs/cloudinary.config");
 
 // Controller to get all products
 const getProducts = catchAsync(async (req, res, next) => {
-    const { page, limit } = req.query;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 12;
 
     const products = await Product.find()
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
-        .populate(["universal.category", "universal.sellerId", "universal.comments", "universal.reviews"])
+        .populate(["universal.category", "universal.sellerId"])
         .lean();
 
     const productCount = await Product.countDocuments();
@@ -33,6 +34,54 @@ const getProducts = catchAsync(async (req, res, next) => {
             products
         }
     })
+});
+
+// Controller to get a single product by id
+const getProduct = catchAsync(async (req, res, next) => {
+    const { productId } = req.params;
+
+    const product = await Product.findById(productId)
+        .populate(["universal.category", "universal.sellerId"])
+        .lean();
+
+    if (!product) {
+        return next(new AppError("Product not found!", 404));
+    }
+
+    res.status(200).json({
+        status: "success",
+        message: "Product returned successfully!",
+        data: {
+            product
+        }
+    });
+});
+
+// Controller to get products that belong to a category
+const getProductsByCategory = catchAsync(async (req, res, next) => {
+    const { categoryId } = req.params;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 12;
+
+    const filter = { "universal.category": categoryId };
+
+    const products = await Product.find(filter)
+        .sort({ createdAt: -1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .populate(["universal.category", "universal.sellerId"])
+        .lean();
+
+    const productCount = await Product.countDocuments(filter);
+
+    res.status(200).json({
+        status: "success",
+        message: "Products returned successfully!",
+        productCount,
+        data: {
+            products
+        }
+    });
 });
 
 // Controller to create new product
@@ -174,4 +223,4 @@ const editProduct = catchAsync(async (req, res, next) => {
     })
 });
 
-module.exports = { getProducts, createProduct, deleteProduct, editProduct };
+module.exports = { getProducts, getProduct, getProductsByCategory, createProduct, deleteProduct, editProduct };

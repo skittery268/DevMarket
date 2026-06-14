@@ -27,6 +27,8 @@ export const SearchProvider = ({ children }) => {
             return res.data.data.users;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -40,6 +42,8 @@ export const SearchProvider = ({ children }) => {
             return res.data.data.products;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -53,6 +57,8 @@ export const SearchProvider = ({ children }) => {
             return res.data.data.categories;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 

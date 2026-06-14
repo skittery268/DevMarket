@@ -1,8 +1,12 @@
 // React tools
 import { createRoot } from 'react-dom/client'
 
+// Global styles
+import './index.css'
+
 // Components
 import App from './App.jsx'
+import { Toaster } from './components/ui/sonner.jsx'
 
 // React Router
 import { BrowserRouter } from 'react-router';
@@ -12,7 +16,10 @@ import { AuthProvider } from './providers/AuthProvider.jsx';
 import { UserProvider } from './providers/UserProvider.jsx';
 import { CategoryProvider } from './providers/CategoryProvider.jsx';
 import { ProductProvider } from './providers/ProductProvider.jsx';
+import { CartProvider } from './providers/CartProvider.jsx';
+import { WishlistProvider } from './providers/WishlistProvider.jsx';
 import { ChatProvider } from './providers/ChatProvider.jsx';
+import { SocketProvider } from './providers/SocketProvider.jsx';
 import { MessageProvider } from './providers/MessageProvider.jsx';
 import { SearchProvider } from './providers/SearchProvider.jsx';
 import { PaymentProvider } from './providers/PaymentProvider.jsx';
@@ -25,15 +32,22 @@ createRoot(document.getElementById('root')).render(
       <UserProvider>
         <CategoryProvider>
           <ProductProvider>
-            <ChatProvider>
-              <MessageProvider>
-                <SearchProvider>
-                  <PaymentProvider>
-                    <App />
-                  </PaymentProvider>
-                </SearchProvider>
-              </MessageProvider>
-            </ChatProvider>
+            <CartProvider>
+              <WishlistProvider>
+                <ChatProvider>
+                  <SocketProvider>
+                    <MessageProvider>
+                      <SearchProvider>
+                        <PaymentProvider>
+                          <App />
+                          <Toaster />
+                        </PaymentProvider>
+                      </SearchProvider>
+                    </MessageProvider>
+                  </SocketProvider>
+                </ChatProvider>
+              </WishlistProvider>
+            </CartProvider>
           </ProductProvider>
         </CategoryProvider>
       </UserProvider>

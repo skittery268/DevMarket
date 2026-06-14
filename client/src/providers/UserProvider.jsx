@@ -28,6 +28,8 @@ export const UserProvider = ({ children }) => {
             return res.data.data.users;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -41,6 +43,8 @@ export const UserProvider = ({ children }) => {
             return res.data.data.user;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -54,6 +58,8 @@ export const UserProvider = ({ children }) => {
             return res.data.data.user;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -65,6 +71,8 @@ export const UserProvider = ({ children }) => {
             setUsers(prev => prev.filter(u => u._id !== userId));
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 

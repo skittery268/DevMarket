@@ -7,6 +7,8 @@ import { ProductContext } from "../context/ProductContext";
 // Services
 import {
     fetchProducts,
+    fetchProduct,
+    fetchProductsByCategory,
     fetchCreateProduct,
     fetchEditProduct,
     fetchDeleteProduct
@@ -30,6 +32,37 @@ export const ProductProvider = ({ children }) => {
             return res.data.data.products;
         } catch (err) {
             console.log(err);
+
+            throw err;
+        };
+    };
+
+    // Function to load a single product by id (returns it, does not touch the list)
+    const loadProduct = async (productId) => {
+        try {
+            const res = await fetchProduct(productId);
+
+            return res.data.data.product;
+        } catch (err) {
+            console.log(err);
+
+            throw err;
+        };
+    };
+
+    // Function to load products of a category (returns list + count)
+    const loadProductsByCategory = async (categoryId, query) => {
+        try {
+            const res = await fetchProductsByCategory(categoryId, query);
+
+            return {
+                products: res.data.data.products,
+                productCount: res.data.productCount
+            };
+        } catch (err) {
+            console.log(err);
+
+            throw err;
         };
     };
 
@@ -43,6 +76,8 @@ export const ProductProvider = ({ children }) => {
             return res.data.data.product;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -56,6 +91,8 @@ export const ProductProvider = ({ children }) => {
             return res.data.data.product;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -67,11 +104,24 @@ export const ProductProvider = ({ children }) => {
             setProducts(prev => prev.filter(p => p._id !== productId));
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
     return (
-        <ProductContext.Provider value={{ products, productCount, loadProducts, createProduct, editProduct, deleteProduct }}>
+        <ProductContext.Provider
+            value={{
+                products,
+                productCount,
+                loadProducts,
+                loadProduct,
+                loadProductsByCategory,
+                createProduct,
+                editProduct,
+                deleteProduct
+            }}
+        >
             {children}
         </ProductContext.Provider>
     );

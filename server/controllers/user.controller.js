@@ -13,17 +13,23 @@ const cloudinary = require("../configs/cloudinary.config");
 
 // Controller to get users by page and limit
 const getUsers = catchAsync(async (req, res, next) => {
-    const { page, limit } = req.query;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 12;
 
-    const users = await User.find()
+    const filter = { isDeleted: { $ne: true } };
+
+    const users = await User.find(filter)
         .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
         .lean();
-    
+
+    const userCount = await User.countDocuments(filter);
+
     res.status(200).json({
         status: "success",
         message: "Users returned successfully!",
+        userCount,
         data: {
             users
         }
@@ -40,7 +46,7 @@ const deleteUser = catchAsync(async (req, res, next) => {
         return next(new AppError("User not found!", 404));
     }
 
-    if (user._id.toString() !== req.user._id.toString() || req.user.role !== "admin") {
+    if (user._id.toString() !== req.user._id.toString() && req.user.role !== "admin") {
         return next(new AppError("Access denied!", 401));
     }
 
@@ -131,8 +137,8 @@ const changeRole = catchAsync(async (req, res, next) => {
         return next(new AppError("Access denied!", 401));
     }
 
-    if (role !== "user" || role !== "seller" || role !== "admin") {
-        return next(new AppError("Wrong Data!", 404));
+    if (!["user", "seller", "admin"].includes(role)) {
+        return next(new AppError("Wrong Data!", 400));
     }
 
     user.role = role;

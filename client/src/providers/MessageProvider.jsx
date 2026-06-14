@@ -1,5 +1,5 @@
 // React tools
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 // Message context
 import { MessageContext } from "../context/MessageContext";
@@ -28,6 +28,8 @@ export const MessageProvider = ({ children }) => {
             return res.data.data.messages;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -36,11 +38,18 @@ export const MessageProvider = ({ children }) => {
         try {
             const res = await fetchSendMessage({ chatId, content });
 
-            setMessages(prev => [...prev, res.data.data.message]);
+            setMessages(prev => {
+                // Avoid duplicates: the socket may also deliver this message back.
+                if (prev.some(m => m._id === res.data.data.message._id)) return prev;
+
+                return [...prev, res.data.data.message];
+            });
 
             return res.data.data.message;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -54,6 +63,8 @@ export const MessageProvider = ({ children }) => {
             return res.data.data.message;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -65,11 +76,51 @@ export const MessageProvider = ({ children }) => {
             setMessages(prev => prev.filter(m => m._id !== messageId));
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
+    // ----------------------- Real-time (Socket.io) helpers -----------------------
+    // These are additive: they let ChatRoom push socket events into the same
+    // messages state, de-duplicating by _id so REST + socket never double up.
+
+    const addIncomingMessage = useCallback((message) => {
+        if (!message?._id) return;
+
+        setMessages(prev => {
+            if (prev.some(m => m._id === message._id)) return prev;
+
+            return [...prev, message];
+        });
+    }, []);
+
+    const replaceMessage = useCallback((message) => {
+        if (!message?._id) return;
+
+        setMessages(prev => prev.map(m => (m._id === message._id ? message : m)));
+    }, []);
+
+    const removeMessage = useCallback((messageId) => {
+        setMessages(prev => prev.filter(m => m._id !== messageId));
+    }, []);
+
+    const clearMessages = useCallback(() => setMessages([]), []);
+
     return (
-        <MessageContext.Provider value={{ messages, loadMessages, sendMessage, editMessage, deleteMessage }}>
+        <MessageContext.Provider
+            value={{
+                messages,
+                loadMessages,
+                sendMessage,
+                editMessage,
+                deleteMessage,
+                addIncomingMessage,
+                replaceMessage,
+                removeMessage,
+                clearMessages
+            }}
+        >
             {children}
         </MessageContext.Provider>
     );

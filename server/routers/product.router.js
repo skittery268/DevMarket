@@ -2,7 +2,7 @@
 const express = require('express');
 
 // Controllers
-const { getProducts, createProduct, editProduct, deleteProduct } = require('../controllers/product.controller');
+const { getProducts, getProduct, getProductsByCategory, createProduct, editProduct, deleteProduct } = require('../controllers/product.controller');
 
 // Middlewares
 const protect = require('../middlewares/auth.middleware');
@@ -23,6 +23,12 @@ const productRouter = express.Router();
 
 // Route to get products by query (page, limit)
 productRouter.get("/", getProducts);
+
+// Route to get products of a specific category
+productRouter.get("/category/:categoryId", getProductsByCategory);
+
+// Route to get a single product by id
+productRouter.get("/:productId", getProduct);
 
 // Middlewares
 productRouter.use(protect, allowedTo("seller", "admin"));

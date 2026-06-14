@@ -31,7 +31,6 @@ userRouter.use(protect);
 userRouter.delete(
     "/:userId",
     deleteUserLimiter,
-    validate(editUserSchema),
     deleteUser
 );
 // Route to edit user info

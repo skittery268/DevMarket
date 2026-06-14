@@ -15,23 +15,25 @@ import { useNavigate } from "react-router";
 // Function to provide functions for any components
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [authLoading, setAuthLoading] = useState(true);
     const navigate = useNavigate();
 
-    // Use effect to auto login
+    // Use effect to auto login (restore session) WITHOUT forcing a redirect,
+    // so deep links and page refreshes keep the user on the current route.
     useEffect(() => {
         const getMe = async () => {
             try {
                 const res = await fetchMe();
-    
+
                 setUser(res.data.data.user);
-                navigate("/profile");
             } catch (err) {
                 console.log(err);
-            };
+            } finally {
+                setAuthLoading(false);
+            }
         };
 
         getMe();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Functuon to register new user
@@ -42,6 +44,8 @@ export const AuthProvider = ({ children }) => {
             navigate("/login");
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -51,7 +55,25 @@ export const AuthProvider = ({ children }) => {
             const res = await fetchLogin(data);
 
             setUser(res.data.data.user);
-            navigate("/profile");
+            navigate("/");
+
+            return res.data.data.user;
+        } catch (err) {
+            console.log(err);
+
+            throw err;
+        };
+    };
+
+    // Re-fetch the current user (e.g. after editing the profile) so the header
+    // avatar / name stay in sync. Additive helper, swallows errors like getMe.
+    const refreshMe = async () => {
+        try {
+            const res = await fetchMe();
+
+            setUser(res.data.data.user);
+
+            return res.data.data.user;
         } catch (err) {
             console.log(err);
         };
@@ -65,11 +87,13 @@ export const AuthProvider = ({ children }) => {
             navigate("/");
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
     return (
-        <AuthContext.Provider value={{ user, register, login, logout }}>
+        <AuthContext.Provider value={{ user, authLoading, register, login, logout, refreshMe }}>
             {children}
         </AuthContext.Provider>
     );

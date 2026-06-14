@@ -4,7 +4,7 @@ import { api } from "../api/Axios";
 // ---------------------------------------IMPORTS---------------------------------------
 
 // Service to fetch categories by query (page, limit)
-export const fetchCategories = async ({ page, limit } = {}) => {
+export const fetchCategories = async ({ page = 1, limit = 100 } = {}) => {
     return await api.get(`/category?page=${page}&limit=${limit}`);
 };
 

@@ -4,7 +4,7 @@ import { api } from "../api/Axios";
 // ---------------------------------------IMPORTS---------------------------------------
 
 // Service to fetch users by query (page, limit)
-export const fetchUsers = async ({ page, limit } = {}) => {
+export const fetchUsers = async ({ page = 1, limit = 50 } = {}) => {
     return await api.get(`/user?page=${page}&limit=${limit}`);
 };
 

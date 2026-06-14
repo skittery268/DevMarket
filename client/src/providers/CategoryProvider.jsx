@@ -30,6 +30,8 @@ export const CategoryProvider = ({ children }) => {
             return res.data.data.categories;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -43,6 +45,8 @@ export const CategoryProvider = ({ children }) => {
             return res.data.data.category;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -56,6 +60,8 @@ export const CategoryProvider = ({ children }) => {
             return res.data.data.category;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -67,6 +73,8 @@ export const CategoryProvider = ({ children }) => {
             setCategories(prev => prev.filter(c => c._id !== id));
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 

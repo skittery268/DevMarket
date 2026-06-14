@@ -86,6 +86,6 @@ userSchema.methods.sendVerificationLink = async function() {
 // Indexing
 userSchema.index({ isVerified: 1 });
 
-const User = mongoose.model("Users", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;

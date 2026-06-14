@@ -26,6 +26,8 @@ export const PaymentProvider = ({ children }) => {
             return res.data.data;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 

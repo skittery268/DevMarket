@@ -27,6 +27,8 @@ export const ChatProvider = ({ children }) => {
             return res.data.data.chats;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -40,6 +42,8 @@ export const ChatProvider = ({ children }) => {
             return res.data.data.chat;
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
@@ -51,6 +55,8 @@ export const ChatProvider = ({ children }) => {
             setChats(prev => prev.filter(c => c._id !== chatId));
         } catch (err) {
             console.log(err);
+
+            throw err;
         };
     };
 
