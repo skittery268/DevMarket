@@ -22,3 +22,8 @@ export const fetchMe = async () => {
 export const fetchLogout = async () => {
     return await api.post("/auth/logout");
 };
+
+// Redirect helper to start Google OAuth flow (full page redirect)
+export const redirectGoogleLogin = () => {
+    window.location.href = `${api.defaults.baseURL}/auth/google`;
+};

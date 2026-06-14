@@ -73,7 +73,7 @@ userSchema.methods.comparePassword = async function(candidate) {
 userSchema.methods.sendVerificationLink = async function() {
     const token = await jwt.sign({ userId: this._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-    const link = `${process.env.SERVER_URL}/api/auth/verification?token=${token}`;
+    const link = `${process.env.SERVER_URL}/api/v1/auth/verification?token=${token}`;
 
     const html = `
         <h1>Verification Link</h1>

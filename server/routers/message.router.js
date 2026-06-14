@@ -12,13 +12,13 @@ const protect = require("../middlewares/auth.middleware");
 const messageRouter = express.Router();
 
 // Route to get all messages of a chat
-messageRouter.get("/", getMessages);
+messageRouter.get("/:chatId", getMessages);
 
 // Middlewares
 messageRouter.use(protect);
 
 // Route to send message in a chat
-messageRouter.post("/", sendMessage);
+messageRouter.post("/:chatId", sendMessage);
 // Route to delete a message
 messageRouter.delete("/:messageId", deleteMessage);
 // Route to edit a message

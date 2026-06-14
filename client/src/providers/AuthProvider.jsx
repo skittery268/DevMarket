@@ -1,9 +1,14 @@
-// Auth Context
-import { useState } from "react";
+// React tools
+import { useState, useEffect } from "react";
+
+// Auth context
 import { AuthContext } from "../context/AuthContext"
+
+// Services
 import { fetchLogin, fetchLogout, fetchMe, fetchRegister } from "../services/AuthService";
+
+// React router
 import { useNavigate } from "react-router";
-import { useEffect } from "react";
 
 // ---------------------------------------IMPORTS---------------------------------------
 
@@ -21,12 +26,13 @@ export const AuthProvider = ({ children }) => {
                 setUser(res.data.data.user);
                 navigate("/profile");
             } catch (err) {
-                return err;
+                console.log(err);
             };
         };
 
         getMe();
-    }, [navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Functuon to register new user
     const register = async (data) => {
@@ -35,7 +41,7 @@ export const AuthProvider = ({ children }) => {
 
             navigate("/login");
         } catch (err) {
-            return err
+            console.log(err);
         };
     };
 
@@ -47,7 +53,7 @@ export const AuthProvider = ({ children }) => {
             setUser(res.data.data.user);
             navigate("/profile");
         } catch (err) {
-            return err;
+            console.log(err);
         };
     };
 
@@ -55,10 +61,12 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             await fetchLogout();
+            setUser(null);
+            navigate("/");
         } catch (err) {
-            return err;
-        }
-    }
+            console.log(err);
+        };
+    };
 
     return (
         <AuthContext.Provider value={{ user, register, login, logout }}>

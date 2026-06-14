@@ -143,7 +143,7 @@ const changeRole = catchAsync(async (req, res, next) => {
         status: "success",
         message: "User role changed successfully!",
         data: {
-            data
+            user
         }
     });
 });

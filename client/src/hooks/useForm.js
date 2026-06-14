@@ -25,5 +25,5 @@ export const useForm = (initValue) => {
     // Function to clear input fields after submit form
     const resetForm = () => setFormData(initValue || {});
 
-    return [handleChange, handleSubmit, resetForm];
+    return [formData, handleChange, handleSubmit, resetForm];
 };
