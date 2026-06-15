@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 function Container({ className, ...props }) {
   return (
     <div
-      className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 2xl:max-w-[1400px]", className)}
+      className={cn("mx-auto w-full max-w-7xl px-4 sm:px-6 2xl:max-w-350", className)}
       {...props}
     />
   );

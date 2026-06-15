@@ -7,6 +7,7 @@ import './index.css'
 // Components
 import App from './App.jsx'
 import { Toaster } from './components/ui/sonner.jsx'
+import ScrollToTop from './components/ScrollToTop';
 
 // React Router
 import { BrowserRouter } from 'react-router';
@@ -39,6 +40,7 @@ createRoot(document.getElementById('root')).render(
                     <MessageProvider>
                       <SearchProvider>
                         <PaymentProvider>
+                          <ScrollToTop />
                           <App />
                           <Toaster />
                         </PaymentProvider>

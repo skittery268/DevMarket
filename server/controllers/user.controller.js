@@ -67,7 +67,7 @@ const editUser = catchAsync(async (req, res, next) => {
     const { fullname, email, currentPassword, newPassword } = req.body;
     const { file } = req;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(userId).select("+password");
 
     if (!user) {
         return next(new AppError("User not found!", 404));

@@ -80,7 +80,7 @@ function SearchResults() {
           <TabsList className="w-full max-w-md">
             <TabsTrigger value="products">Products ({products.length})</TabsTrigger>
             <TabsTrigger value="categories">Categories ({categories.length})</TabsTrigger>
-            <TabsTrigger value="users">Sellers ({users.length})</TabsTrigger>
+            <TabsTrigger value="users">Users ({users.length})</TabsTrigger>
           </TabsList>
 
           <TabsContent value="products" className="pt-6">

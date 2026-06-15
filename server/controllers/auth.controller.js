@@ -106,7 +106,7 @@ const verificationEmail = catchAsync(async (req, res, next) => {
 
     await user.save();
 
-    res.status(200).send("<h1>Verification successfully, you can come back!</h1>");
+    res.redirect(process.env.CLIENT_URL);
 });
 
 // Controller to auto login
