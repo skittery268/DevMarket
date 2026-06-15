@@ -45,6 +45,8 @@ const io = new Server(server, {
     }
 });
 
+app.use('/api/v1/payment/webhook', express.raw({ type: "application/json" }));
+
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
@@ -57,8 +59,6 @@ app.use((req, res, next) => {
     req.io = io;
     next();
 });
-
-app.use('/api/v1/payment/webhook', express.raw({ type: "application/json" }));
 
 // Security
 app.use(mongoSanitizeMiddleware);
