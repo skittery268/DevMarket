@@ -163,39 +163,39 @@ const stripeWebhook = async (req, res, next) => {
         payment.stripePaymentIntentId = session.payment_intent;
         payment.webhookProcessed = true;
 
-        const transfersBySeller = payment.sellerDistributions.reduce((acc, item) => {
-            const key = item.sellerStripeAccountId;
+        // const transfersBySeller = payment.sellerDistributions.reduce((acc, item) => {
+        //     const key = item.sellerStripeAccountId;
 
-            if (!acc[key]) {
-                acc[key] = {
-                    sellerId: item.sellerId,
-                    stripeAccountId: item.sellerStripeAccountId,
-                    amount: 0
-                };
-            }
+        //     if (!acc[key]) {
+        //         acc[key] = {
+        //             sellerId: item.sellerId,
+        //             stripeAccountId: item.sellerStripeAccountId,
+        //             amount: 0
+        //         };
+        //     }
 
-            acc[key].amount += item.sellerAmount;
-            return acc;
-        }, {});
+        //     acc[key].amount += item.sellerAmount;
+        //     return acc;
+        // }, {});
 
-        payment.sellerTransfers = [];
+        // payment.sellerTransfers = [];
 
-        for (const transferData of Object.values(transfersBySeller)) {
-            const transfer = await stripe.transfers.create({
-                amount: Math.round(transferData.amount * 100),
-                currency: "usd",
-                destination: transferData.stripeAccountId,
-                transfer_group: payment.transferGroup
-            });
+        // for (const transferData of Object.values(transfersBySeller)) {
+        //     const transfer = await stripe.transfers.create({
+        //         amount: Math.round(transferData.amount * 100),
+        //         currency: "usd",
+        //         destination: transferData.stripeAccountId,
+        //         transfer_group: payment.transferGroup
+        //     });
 
-            payment.sellerTransfers.push({
-                sellerId: transferData.sellerId,
-                stripeAccountId: transferData.stripeAccountId,
-                amount: transferData.amount,
-                stripeTransferId: transfer.id,
-                status: "succeeded"
-            });
-        }
+        //     payment.sellerTransfers.push({
+        //         sellerId: transferData.sellerId,
+        //         stripeAccountId: transferData.stripeAccountId,
+        //         amount: transferData.amount,
+        //         stripeTransferId: transfer.id,
+        //         status: "succeeded"
+        //     });
+        // }
 
         await payment.save();
     }
