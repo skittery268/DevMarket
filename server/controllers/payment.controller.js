@@ -34,37 +34,37 @@ const createCheckoutSession = catchAsync(async (req, res, next) => {
         return next(new AppError("Products cant be found", 404));
     }
 
-    // const sellerIds = [...new Set(products.map(product => product.universal.sellerId.toString()))];
-    // const sellers = await User.find({ _id: { $in: sellerIds } }).select('stripeAccountId');
-    // const sellerMap = sellers.reduce((map, seller) => {
-    //     map[seller._id.toString()] = seller;
-    //     return map;
-    // }, {});
+    const sellerIds = [...new Set(products.map(product => product.universal.sellerId.toString()))];
+    const sellers = await User.find({ _id: { $in: sellerIds } }).select('stripeAccountId');
+    const sellerMap = sellers.reduce((map, seller) => {
+        map[seller._id.toString()] = seller;
+        return map;
+    }, {});
 
     const orderDistributions = [];
 
-    // for (const product of products) {
-    //     const quantity = obj[product._id.toString()];
-    //     const seller = sellerMap[product.universal.sellerId.toString()];
+    for (const product of products) {
+        const quantity = obj[product._id.toString()];
+        const seller = sellerMap[product.universal.sellerId.toString()];
 
-    //     if (!seller || !seller.stripeAccountId) {
-    //         return next(new AppError("All sellers must have a Stripe account connected before checkout.", 400));
-    //     }
+        // if (!seller || !seller.stripeAccountId) {
+        //     return next(new AppError("All sellers must have a Stripe account connected before checkout.", 400));
+        // }
 
-    //     const itemTotal = product.universal.price * quantity;
-    //     const commission = Number((itemTotal * 0.05).toFixed(2));
-    //     const sellerAmount = Number((itemTotal - commission).toFixed(2));
+        const itemTotal = product.universal.price * quantity;
+        const commission = Number((itemTotal * 0.05).toFixed(2));
+        const sellerAmount = Number((itemTotal - commission).toFixed(2));
 
-    //     orderDistributions.push({
-    //         productId: product._id,
-    //         sellerId: product.universal.sellerId,
-    //         sellerStripeAccountId: seller.stripeAccountId,
-    //         quantity,
-    //         itemTotal,
-    //         commission,
-    //         sellerAmount
-    //     });
-    // }
+        orderDistributions.push({
+            productId: product._id,
+            sellerId: product.universal.sellerId,
+            // sellerStripeAccountId: seller.stripeAccountId,
+            quantity,
+            itemTotal,
+            commission,
+            sellerAmount
+        });
+    }
 
     const totalAmount = orderDistributions.reduce((accumulator, item) => accumulator + item.itemTotal, 0);
     const platformCommission = orderDistributions.reduce((accumulator, item) => accumulator + item.commission, 0);
@@ -141,6 +141,22 @@ const stripeWebhook = async (req, res, next) => {
 
         if (!payment) {
             return res.status(200).json({ received: true });
+        }
+
+        for (const distribution of payment.sellerDistributions) {
+            const product = await Product.findById(distribution.productId);
+            
+            if (!product) {
+                return next(new AppError("Product not found!", 404));
+            };
+
+            product.universal.stock = product.universal.stock - distribution.quantity;
+
+            await product.save();
+
+            if (product.universal.stock <= 0) {
+                await Product.findByIdAndDelete(distribution.productId);
+            };
         }
 
         payment.status = "succeeded";

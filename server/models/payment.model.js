@@ -52,10 +52,10 @@ const paymentSchema = new mongoose.Schema({
                 ref: "User",
                 required: [true, "Seller ID is required for distribution"]
             },
-            sellerStripeAccountId: {
-                type: String,
-                required: [true, "Seller Stripe account ID is required for distribution"]
-            },
+            // sellerStripeAccountId: {
+            //     type: String,
+            //     required: [true, "Seller Stripe account ID is required for distribution"]
+            // },
             quantity: {
                 type: Number,
                 required: [true, "Quantity is required for distribution"]
