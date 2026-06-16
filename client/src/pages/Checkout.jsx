@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router";
 import { motion } from "framer-motion";
 import { Lock, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
 
 import { useCart } from "@/hooks/useCart";
 import { usePayment } from "@/hooks/usePayment";
@@ -27,7 +26,7 @@ function Checkout() {
       // On success this redirects the browser to the Stripe hosted checkout.
       await createCheckoutSession(toUserOrder());
     } catch (err) {
-      toast.error(apiError(err, "Checkout could not be started"));
+      console.error(apiError(err, "Checkout could not be started"));
       setLoading(false);
     }
   };

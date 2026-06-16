@@ -9,7 +9,6 @@ import {
   PackageX,
   ChevronRight,
 } from "lucide-react";
-import { toast } from "sonner";
 
 import { useProduct } from "@/hooks/useProduct";
 import { useCart } from "@/hooks/useCart";
@@ -97,7 +96,7 @@ function ProductDetail() {
   const handleAdd = () => {
     if (outOfStock) return;
     addToCart(product, qty);
-    toast.success("Added to cart", { description: `${qty} × ${u.title}` });
+    console.log("Added to cart", { description: `${qty} × ${u.title}` });
   };
 
   const handleMessageSeller = async () => {
@@ -110,7 +109,7 @@ function ProductDetail() {
       const chat = await createChat({ productId: product._id, sellerId });
       if (chat?._id) navigate(`/chats/${chat._id}`);
     } catch (err) {
-      toast.error(apiError(err, "Could not start a chat"));
+      console.error(apiError(err, "Could not start a chat"));
     } finally {
       setMessaging(false);
     }
@@ -212,7 +211,7 @@ function ProductDetail() {
                 variant="outline"
                 onClick={() => {
                   toggleWishlist(product);
-                  toast(wished ? "Removed from wishlist" : "Saved to wishlist");
+                  console.log(wished ? "Removed from wishlist" : "Saved to wishlist");
                 }}
               >
                 <Heart className={cn("size-5", wished && "fill-destructive text-destructive")} />

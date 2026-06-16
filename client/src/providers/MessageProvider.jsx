@@ -1,5 +1,5 @@
 // React tools
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 // Message context
 import { MessageContext } from "../context/MessageContext";
@@ -18,8 +18,9 @@ import {
 export const MessageProvider = ({ children }) => {
     const [messages, setMessages] = useState([]);
 
-    // Function to load all messages of a chat
-    const loadMessages = async (chatId) => {
+    // Function to load all messages of a chat.
+    // Not cached: messages are real-time, so a chat must always open on fresh data.
+    const loadMessages = useCallback(async (chatId) => {
         try {
             const res = await fetchMessages(chatId);
 
@@ -31,10 +32,10 @@ export const MessageProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, []);
 
     // Function to send a message in a chat
-    const sendMessage = async ({ chatId, content }) => {
+    const sendMessage = useCallback(async ({ chatId, content }) => {
         try {
             const res = await fetchSendMessage({ chatId, content });
 
@@ -51,10 +52,10 @@ export const MessageProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, []);
 
     // Function to edit a message by id
-    const editMessage = async (messageId, content) => {
+    const editMessage = useCallback(async (messageId, content) => {
         try {
             const res = await fetchEditMessage(messageId, content);
 
@@ -66,10 +67,10 @@ export const MessageProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, []);
 
     // Function to delete a message by id
-    const deleteMessage = async (messageId) => {
+    const deleteMessage = useCallback(async (messageId) => {
         try {
             await fetchDeleteMessage(messageId);
 
@@ -79,7 +80,7 @@ export const MessageProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, []);
 
     // ----------------------- Real-time (Socket.io) helpers -----------------------
     // These are additive: they let ChatRoom push socket events into the same
@@ -107,20 +108,34 @@ export const MessageProvider = ({ children }) => {
 
     const clearMessages = useCallback(() => setMessages([]), []);
 
+    // Memoize the context value so consumers only re-render when messages change.
+    const value = useMemo(
+        () => ({
+            messages,
+            loadMessages,
+            sendMessage,
+            editMessage,
+            deleteMessage,
+            addIncomingMessage,
+            replaceMessage,
+            removeMessage,
+            clearMessages
+        }),
+        [
+            messages,
+            loadMessages,
+            sendMessage,
+            editMessage,
+            deleteMessage,
+            addIncomingMessage,
+            replaceMessage,
+            removeMessage,
+            clearMessages
+        ]
+    );
+
     return (
-        <MessageContext.Provider
-            value={{
-                messages,
-                loadMessages,
-                sendMessage,
-                editMessage,
-                deleteMessage,
-                addIncomingMessage,
-                replaceMessage,
-                removeMessage,
-                clearMessages
-            }}
-        >
+        <MessageContext.Provider value={value}>
             {children}
         </MessageContext.Provider>
     );

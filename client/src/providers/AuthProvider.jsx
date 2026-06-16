@@ -1,11 +1,14 @@
 // React tools
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 // Auth context
 import { AuthContext } from "../context/AuthContext"
 
 // Services
 import { fetchLogin, fetchLogout, fetchMe, fetchRegister } from "../services/AuthService";
+
+// Request cache
+import { invalidate } from "../lib/cache";
 
 // React router
 import { useNavigate } from "react-router";
@@ -37,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     // Functuon to register new user
-    const register = async (data) => {
+    const register = useCallback(async (data) => {
         try {
             await fetchRegister(data);
 
@@ -47,12 +50,15 @@ export const AuthProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, [navigate]);
 
     // Function to login user
-    const login = async (data) => {
+    const login = useCallback(async (data) => {
         try {
             const res = await fetchLogin(data);
+
+            // Drop any data cached for a previous session so nothing leaks across accounts.
+            invalidate();
 
             setUser(res.data.data.user);
             navigate("/");
@@ -63,11 +69,11 @@ export const AuthProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, [navigate]);
 
     // Re-fetch the current user (e.g. after editing the profile) so the header
     // avatar / name stay in sync. Additive helper, swallows errors like getMe.
-    const refreshMe = async () => {
+    const refreshMe = useCallback(async () => {
         try {
             const res = await fetchMe();
 
@@ -77,12 +83,16 @@ export const AuthProvider = ({ children }) => {
         } catch (err) {
             console.log(err);
         };
-    };
+    }, []);
 
     // Function to logout (clear cookies)
-    const logout = async () => {
+    const logout = useCallback(async () => {
         try {
             await fetchLogout();
+
+            // Clear all cached data on logout so the next user starts clean.
+            invalidate();
+
             setUser(null);
             navigate("/");
         } catch (err) {
@@ -90,10 +100,17 @@ export const AuthProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, [navigate]);
+
+    // Memoize the context value so the whole app (Auth is the outermost provider)
+    // does not re-render its consumers unless user / authLoading actually change.
+    const value = useMemo(
+        () => ({ user, authLoading, register, login, logout, refreshMe }),
+        [user, authLoading, register, login, logout, refreshMe]
+    );
 
     return (
-        <AuthContext.Provider value={{ user, authLoading, register, login, logout, refreshMe }}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );

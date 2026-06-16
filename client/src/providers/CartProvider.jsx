@@ -87,19 +87,24 @@ export const CartProvider = ({ children }) => {
         [items]
     );
 
+    // Memoize the context value so consumers (e.g. the header cart badge) only
+    // re-render when the cart data actually changes.
+    const value = useMemo(
+        () => ({
+            items,
+            addToCart,
+            removeFromCart,
+            updateQuantity,
+            clearCart,
+            totalPrice,
+            itemCount,
+            toUserOrder
+        }),
+        [items, addToCart, removeFromCart, updateQuantity, clearCart, totalPrice, itemCount, toUserOrder]
+    );
+
     return (
-        <CartContext.Provider
-            value={{
-                items,
-                addToCart,
-                removeFromCart,
-                updateQuantity,
-                clearCart,
-                totalPrice,
-                itemCount,
-                toUserOrder
-            }}
-        >
+        <CartContext.Provider value={value}>
             {children}
         </CartContext.Provider>
     );

@@ -1,5 +1,5 @@
 // React tools
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 // Payment context
 import { PaymentContext } from "../context/PaymentContext";
@@ -14,7 +14,7 @@ export const PaymentProvider = ({ children }) => {
     const [payment, setPayment] = useState(null);
 
     // Function to create a Stripe checkout session and redirect the user to it
-    const createCheckoutSession = async (userOrder) => {
+    const createCheckoutSession = useCallback(async (userOrder) => {
         try {
             const res = await fetchCreateCheckoutSession(userOrder);
 
@@ -29,10 +29,16 @@ export const PaymentProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, []);
+
+    // Memoize the context value so consumers only re-render on real changes.
+    const value = useMemo(
+        () => ({ payment, createCheckoutSession }),
+        [payment, createCheckoutSession]
+    );
 
     return (
-        <PaymentContext.Provider value={{ payment, createCheckoutSession }}>
+        <PaymentContext.Provider value={value}>
             {children}
         </PaymentContext.Provider>
     );

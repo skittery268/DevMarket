@@ -1,5 +1,5 @@
 // React tools
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 
 // Wishlist context
 import { WishlistContext } from "../context/WishlistContext";
@@ -55,16 +55,21 @@ export const WishlistProvider = ({ children }) => {
 
     const clearWishlist = useCallback(() => setItems([]), []);
 
+    // Memoize the context value so consumers (e.g. the header wishlist badge)
+    // only re-render when the wishlist data actually changes.
+    const value = useMemo(
+        () => ({
+            items,
+            toggleWishlist,
+            isInWishlist,
+            removeFromWishlist,
+            clearWishlist
+        }),
+        [items, toggleWishlist, isInWishlist, removeFromWishlist, clearWishlist]
+    );
+
     return (
-        <WishlistContext.Provider
-            value={{
-                items,
-                toggleWishlist,
-                isInWishlist,
-                removeFromWishlist,
-                clearWishlist
-            }}
-        >
+        <WishlistContext.Provider value={value}>
             {children}
         </WishlistContext.Provider>
     );

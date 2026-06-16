@@ -10,7 +10,6 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import { toast } from "sonner";
 
 import { useMessage } from "@/hooks/useMessage";
 import { useChat } from "@/hooks/useChat";
@@ -118,7 +117,7 @@ function ChatRoom() {
     try {
       await sendMessage({ chatId, content });
     } catch (err) {
-      toast.error(apiError(err, "Message not sent"));
+      console.error(apiError(err, "Message not sent"));
     }
   };
 
@@ -130,7 +129,7 @@ function ChatRoom() {
       setEditingId(null);
       setEditText("");
     } catch (err) {
-      toast.error(apiError(err, "Could not edit message"));
+      console.error(apiError(err, "Could not edit message"));
     }
   };
 
@@ -138,7 +137,7 @@ function ChatRoom() {
     try {
       await deleteMessage(id);
     } catch (err) {
-      toast.error(apiError(err, "Could not delete message"));
+      console.error(apiError(err, "Could not delete message"));
     }
   };
 

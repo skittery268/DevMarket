@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/sheet";
 import SearchBar from "./SearchBar";
 import UserMenu from "./UserMenu";
+import ThemeToggle from "./ThemeToggle";
 
 const NAV = [
   { to: "/", label: "Home", end: true },
@@ -135,6 +136,8 @@ function Header() {
 
         {/* Actions */}
         <div className="ml-auto flex items-center gap-1.5 md:ml-0">
+          <ThemeToggle />
+
           <Button variant="ghost" size="icon" asChild aria-label="Wishlist">
             <Link to="/wishlist" className="relative">
               <Heart />

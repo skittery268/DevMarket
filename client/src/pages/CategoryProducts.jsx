@@ -24,6 +24,7 @@ function CategoryProducts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     (async () => {
       setLoading(true);
       try {

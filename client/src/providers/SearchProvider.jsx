@@ -1,8 +1,11 @@
 // React tools
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 // Search context
 import { SearchContext } from "../context/SearchContext";
+
+// Request cache (caching + in-flight de-duplication)
+import { cachedRequest } from "../lib/cache";
 
 // Services
 import {
@@ -17,56 +20,77 @@ import {
 export const SearchProvider = ({ children }) => {
     const [results, setResults] = useState({ users: [], products: [], categories: [] });
 
-    // Function to search users by fullname
-    const searchUsers = async (fullname) => {
+    // Function to search users by fullname (cached per query term)
+    const searchUsers = useCallback(async (fullname) => {
         try {
-            const res = await fetchSearchUsers(fullname);
+            const data = await cachedRequest(`search:users:${fullname}`, async () => {
+                const res = await fetchSearchUsers(fullname);
 
-            setResults(prev => ({ ...prev, users: res.data.data.users }));
+                return res.data.data.users;
+            });
 
-            return res.data.data.users;
+            setResults(prev => ({ ...prev, users: data }));
+
+            return data;
         } catch (err) {
             console.log(err);
 
             throw err;
         };
-    };
+    }, []);
 
-    // Function to search products by title or description
-    const searchProducts = async (title) => {
+    // Function to search products by title or description (cached per query term)
+    const searchProducts = useCallback(async (title) => {
         try {
-            const res = await fetchSearchProducts(title);
+            const data = await cachedRequest(`search:products:${title}`, async () => {
+                const res = await fetchSearchProducts(title);
 
-            setResults(prev => ({ ...prev, products: res.data.data.products }));
+                return res.data.data.products;
+            });
 
-            return res.data.data.products;
+            setResults(prev => ({ ...prev, products: data }));
+
+            return data;
         } catch (err) {
             console.log(err);
 
             throw err;
         };
-    };
+    }, []);
 
-    // Function to search categories by name or description
-    const searchCategories = async (name) => {
+    // Function to search categories by name or description (cached per query term)
+    const searchCategories = useCallback(async (name) => {
         try {
-            const res = await fetchSearchCategories(name);
+            const data = await cachedRequest(`search:categories:${name}`, async () => {
+                const res = await fetchSearchCategories(name);
 
-            setResults(prev => ({ ...prev, categories: res.data.data.categories }));
+                return res.data.data.categories;
+            });
 
-            return res.data.data.categories;
+            setResults(prev => ({ ...prev, categories: data }));
+
+            return data;
         } catch (err) {
             console.log(err);
 
             throw err;
         };
-    };
+    }, []);
 
     // Function to clear search results
-    const clearResults = () => setResults({ users: [], products: [], categories: [] });
+    const clearResults = useCallback(
+        () => setResults({ users: [], products: [], categories: [] }),
+        []
+    );
+
+    // Memoize the context value so consumers only re-render on real data changes.
+    const value = useMemo(
+        () => ({ results, searchUsers, searchProducts, searchCategories, clearResults }),
+        [results, searchUsers, searchProducts, searchCategories, clearResults]
+    );
 
     return (
-        <SearchContext.Provider value={{ results, searchUsers, searchProducts, searchCategories, clearResults }}>
+        <SearchContext.Provider value={value}>
             {children}
         </SearchContext.Provider>
     );

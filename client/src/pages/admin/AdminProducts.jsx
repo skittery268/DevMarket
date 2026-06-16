@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { ExternalLink, PackageSearch, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
 import { useProduct } from "@/hooks/useProduct";
 import { PAGE_SIZE } from "@/lib/constants";
@@ -33,12 +32,13 @@ function AdminProducts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     (async () => {
       setLoading(true);
       try {
         await loadProducts({ page, limit: PAGE_SIZE });
       } catch (err) {
-        toast.error(apiError(err, "Could not load products"));
+        console.error(apiError(err, "Could not load products"));
       } finally {
         setLoading(false);
       }
@@ -49,9 +49,9 @@ function AdminProducts() {
   const handleDelete = async (id) => {
     try {
       await deleteProduct(id);
-      toast.success("Product deleted");
+      console.log("Product deleted");
     } catch (err) {
-      toast.error(apiError(err, "Could not delete product"));
+      console.error(apiError(err, "Could not delete product"));
     }
   };
 

@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { BadgeCheck, Camera, Save, ShieldAlert } from "lucide-react";
-import { toast } from "sonner";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useUser } from "@/hooks/useUser";
@@ -56,10 +55,10 @@ function Profile() {
     try {
       await editUser(user._id, data);
       await refreshMe();
-      toast.success("Profile updated");
+      console.log("Profile updated");
       setAvatarFile(null);
     } catch (err) {
-      toast.error(apiError(err, "Could not update profile"));
+      console.error(apiError(err, "Could not update profile"));
     } finally {
       setLoading(false);
     }

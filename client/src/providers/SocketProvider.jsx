@@ -1,5 +1,5 @@
 // React tools
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 
 // Socket context + shared instance
 import { SocketContext } from "../context/SocketContext";
@@ -26,8 +26,12 @@ export const SocketProvider = ({ children }) => {
         };
     }, [socket]);
 
+    // Memoize the context value so consumers only re-render when the connection
+    // status flips, not on every provider render.
+    const value = useMemo(() => ({ socket, connected }), [socket, connected]);
+
     return (
-        <SocketContext.Provider value={{ socket, connected }}>
+        <SocketContext.Provider value={value}>
             {children}
         </SocketContext.Provider>
     );

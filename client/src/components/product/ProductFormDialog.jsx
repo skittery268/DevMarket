@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { ImagePlus, X } from "lucide-react";
-import { toast } from "sonner";
 
 import { apiError } from "@/lib/format";
 import {
@@ -66,7 +65,7 @@ function ProductFormDialog({ trigger, product, categories = [], onSubmit }) {
     e.preventDefault();
 
     if (!isEdit && !categoryId) {
-      toast.error("Please choose a category");
+      console.error("Please choose a category");
       return;
     }
 
@@ -89,10 +88,10 @@ function ProductFormDialog({ trigger, product, categories = [], onSubmit }) {
     setLoading(true);
     try {
       await onSubmit(fd, categoryId);
-      toast.success(isEdit ? "Product updated" : "Product created");
+      console.log(isEdit ? "Product updated" : "Product created");
       setOpen(false);
     } catch (err) {
-      toast.error(apiError(err, "Could not save product"));
+      console.error(apiError(err, "Could not save product"));
     } finally {
       setLoading(false);
     }

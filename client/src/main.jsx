@@ -6,13 +6,13 @@ import './index.css'
 
 // Components
 import App from './App.jsx'
-import { Toaster } from './components/ui/sonner.jsx'
 import ScrollToTop from './components/ScrollToTop';
 
 // React Router
 import { BrowserRouter } from 'react-router';
 
 // Providers
+import { ThemeProvider } from './providers/ThemeProvider.jsx';
 import { AuthProvider } from './providers/AuthProvider.jsx';
 import { UserProvider } from './providers/UserProvider.jsx';
 import { CategoryProvider } from './providers/CategoryProvider.jsx';
@@ -29,6 +29,7 @@ import { PaymentProvider } from './providers/PaymentProvider.jsx';
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
+    <ThemeProvider>
     <AuthProvider>
       <UserProvider>
         <CategoryProvider>
@@ -42,7 +43,6 @@ createRoot(document.getElementById('root')).render(
                         <PaymentProvider>
                           <ScrollToTop />
                           <App />
-                          <Toaster />
                         </PaymentProvider>
                       </SearchProvider>
                     </MessageProvider>
@@ -54,5 +54,6 @@ createRoot(document.getElementById('root')).render(
         </CategoryProvider>
       </UserProvider>
     </AuthProvider>
+    </ThemeProvider>
   </BrowserRouter>
 );

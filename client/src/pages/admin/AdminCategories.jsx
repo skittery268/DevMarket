@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FolderPlus, LayoutGrid, Pencil, Plus, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
 import { useCategory } from "@/hooks/useCategory";
 import { categoryImage, apiError } from "@/lib/format";
@@ -26,7 +25,7 @@ function AdminCategories() {
       try {
         await loadCategories({ page: 1, limit: 100 });
       } catch (err) {
-        toast.error(apiError(err, "Could not load categories"));
+        console.error(apiError(err, "Could not load categories"));
       } finally {
         setLoading(false);
       }
@@ -37,9 +36,9 @@ function AdminCategories() {
   const handleDelete = async (id) => {
     try {
       await deleteCategory(id);
-      toast.success("Category deleted");
+      console.log("Category deleted");
     } catch (err) {
-      toast.error(apiError(err, "Could not delete category"));
+      console.error(apiError(err, "Could not delete category"));
     }
   };
 

@@ -1,7 +1,6 @@
 import { Link, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingBag, Trash2, ArrowRight } from "lucide-react";
-import { toast } from "sonner";
 
 import { useCart } from "@/hooks/useCart";
 import { formatPrice, productImage } from "@/lib/format";
@@ -112,7 +111,7 @@ function Cart() {
                 size="sm"
                 onClick={() => {
                   clearCart();
-                  toast("Cart cleared");
+                  console.log("Cart cleared");
                 }}
               >
                 <Trash2 /> Clear cart

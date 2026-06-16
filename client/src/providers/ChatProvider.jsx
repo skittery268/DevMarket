@@ -1,5 +1,5 @@
 // React tools
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 // Chat context
 import { ChatContext } from "../context/ChatContext";
@@ -17,8 +17,10 @@ import {
 export const ChatProvider = ({ children }) => {
     const [chats, setChats] = useState([]);
 
-    // Function to load all chats of the current user
-    const loadChats = async () => {
+    // Function to load all chats of the current user.
+    // Intentionally NOT cached: chat previews (last message, updatedAt) change in
+    // real time, so the list must always reflect the latest server state.
+    const loadChats = useCallback(async () => {
         try {
             const res = await fetchChats();
 
@@ -30,10 +32,10 @@ export const ChatProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, []);
 
     // Function to create a new chat for a product with its seller
-    const createChat = async ({ productId, sellerId }) => {
+    const createChat = useCallback(async ({ productId, sellerId }) => {
         try {
             const res = await fetchCreateChat({ productId, sellerId });
 
@@ -45,10 +47,10 @@ export const ChatProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, []);
 
     // Function to delete a chat (and all its messages) by id
-    const deleteChat = async (chatId) => {
+    const deleteChat = useCallback(async (chatId) => {
         try {
             await fetchDeleteChat(chatId);
 
@@ -58,10 +60,16 @@ export const ChatProvider = ({ children }) => {
 
             throw err;
         };
-    };
+    }, []);
+
+    // Memoize the context value so consumers only re-render when chats change.
+    const value = useMemo(
+        () => ({ chats, loadChats, createChat, deleteChat }),
+        [chats, loadChats, createChat, deleteChat]
+    );
 
     return (
-        <ChatContext.Provider value={{ chats, loadChats, createChat, deleteChat }}>
+        <ChatContext.Provider value={value}>
             {children}
         </ChatContext.Provider>
     );

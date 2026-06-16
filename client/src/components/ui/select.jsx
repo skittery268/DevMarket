@@ -22,7 +22,7 @@ function SelectTrigger({ className, size = "default", children, ...props }) {
       className={cn(
         "flex w-full items-center justify-between gap-2 rounded-xl border border-input bg-card px-3.5 py-2 text-sm shadow-sm outline-none transition-[color,box-shadow]",
         "data-[size=default]:h-10 data-[size=sm]:h-9",
-        "data-[placeholder]:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30",
+        "data-placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/30",
         "disabled:cursor-not-allowed disabled:opacity-50 [&_svg]:size-4 [&_svg]:shrink-0",
         className
       )}
@@ -42,7 +42,7 @@ function SelectContent({ className, children, position = "popper", ...props }) {
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          "bg-popover text-popover-foreground relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] overflow-hidden rounded-xl border border-border/70 shadow-card",
+          "bg-popover text-popover-foreground relative z-50 max-h-(--radix-select-content-available-height) min-w-32 overflow-hidden rounded-xl border border-border/70 shadow-card",
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95",
           position === "popper" && "data-[side=bottom]:translate-y-1 data-[side=top]:-translate-y-1",
           className
@@ -56,7 +56,7 @@ function SelectContent({ className, children, position = "popper", ...props }) {
         <SelectPrimitive.Viewport
           className={cn(
             "p-1.5",
-            position === "popper" && "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]"
+            position === "popper" && "h-(--radix-select-trigger-height) w-full min-w-(--radix-select-trigger-width)"
           )}
         >
           {children}
@@ -75,7 +75,7 @@ function SelectItem({ className, children, ...props }) {
       data-slot="select-item"
       className={cn(
         "relative flex w-full cursor-pointer items-center gap-2 rounded-lg py-2 pr-8 pl-2.5 text-sm outline-none select-none",
-        "focus:bg-secondary focus:text-secondary-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+        "focus:bg-secondary focus:text-secondary-foreground data-disabled:pointer-events-none data-disabled:opacity-50",
         className
       )}
       {...props}

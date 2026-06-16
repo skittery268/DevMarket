@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Link, Navigate } from "react-router";
 import { motion } from "framer-motion";
 import { Eye, EyeOff, LogIn } from "lucide-react";
-import { toast } from "sonner";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useForm } from "@/hooks/useForm";
@@ -30,9 +29,9 @@ const Login = () => {
     setLoading(true);
     try {
       await login(data);
-      toast.success("Welcome back!");
+      console.log("Welcome back!");
     } catch (err) {
-      toast.error(apiError(err, "Invalid email or password"));
+      console.error(apiError(err, "Invalid email or password"));
     } finally {
       setLoading(false);
     }

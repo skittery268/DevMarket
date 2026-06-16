@@ -1,7 +1,6 @@
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { Heart, ShoppingCart, Store } from "lucide-react";
-import { toast } from "sonner";
 
 import { useCart } from "@/hooks/useCart";
 import { useWishlist } from "@/hooks/useWishlist";
@@ -25,13 +24,13 @@ function ProductCard({ product }) {
     e.preventDefault();
     if (outOfStock) return;
     addToCart(product, 1);
-    toast.success("Added to cart", { description: u.title });
+    console.log("Added to cart", { description: u.title });
   };
 
   const handleWish = (e) => {
     e.preventDefault();
     toggleWishlist(product);
-    toast(wished ? "Removed from wishlist" : "Saved to wishlist", { description: u.title });
+    console.log(wished ? "Removed from wishlist" : "Saved to wishlist", { description: u.title });
   };
 
   return (

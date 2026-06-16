@@ -15,6 +15,7 @@ function Products() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     (async () => {
       setLoading(true);
       try {
@@ -26,7 +27,6 @@ function Products() {
         setLoading(false);
       }
     })();
-    window.scrollTo({ top: 0, behavior: "smooth" });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [page]);
 

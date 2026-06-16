@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
 import { ExternalLink, Package, Pencil, Plus, Store, Trash2 } from "lucide-react";
-import { toast } from "sonner";
 
 import { useProduct } from "@/hooks/useProduct";
 import { useCategory } from "@/hooks/useCategory";
@@ -34,7 +33,7 @@ function SellerProducts() {
           loadCategories({ page: 1, limit: 100 }),
         ]);
       } catch (err) {
-        toast.error(apiError(err, "Could not load your products"));
+        console.error(apiError(err, "Could not load your products"));
       } finally {
         setLoading(false);
       }
@@ -54,9 +53,9 @@ function SellerProducts() {
   const handleDelete = async (id) => {
     try {
       await deleteProduct(id);
-      toast.success("Product deleted");
+      console.log("Product deleted");
     } catch (err) {
-      toast.error(apiError(err, "Could not delete product"));
+      console.error(apiError(err, "Could not delete product"));
     }
   };
 

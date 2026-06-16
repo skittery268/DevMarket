@@ -9,7 +9,6 @@ import {
   User as UserIcon,
   Heart,
 } from "lucide-react";
-import { toast } from "sonner";
 
 import { useAuth } from "@/hooks/useAuth";
 import { avatarUrl, initials, apiError } from "@/lib/format";
@@ -33,9 +32,9 @@ function UserMenu() {
   const handleLogout = async () => {
     try {
       await logout();
-      toast.success("Signed out");
+      console.log("Signed out");
     } catch (err) {
-      toast.error(apiError(err, "Could not sign out"));
+      console.error(apiError(err, "Could not sign out"));
     }
   };
 

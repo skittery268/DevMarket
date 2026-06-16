@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BadgeCheck, ShieldAlert, Trash2, Users } from "lucide-react";
-import { toast } from "sonner";
 
 import { useUser } from "@/hooks/useUser";
 import { useAuth } from "@/hooks/useAuth";
@@ -42,7 +41,7 @@ function AdminUsers() {
       try {
         await loadUsers({ page: 1, limit: 50 });
       } catch (err) {
-        toast.error(apiError(err, "Could not load users"));
+        console.error(apiError(err, "Could not load users"));
       } finally {
         setLoading(false);
       }
@@ -53,18 +52,18 @@ function AdminUsers() {
   const handleRole = async (id, role) => {
     try {
       await changeRole(id, role);
-      toast.success("Role updated");
+      console.log("Role updated");
     } catch (err) {
-      toast.error(apiError(err, "Could not change role"));
+      console.error(apiError(err, "Could not change role"));
     }
   };
 
   const handleDelete = async (id) => {
     try {
       await deleteUser(id);
-      toast.success("User deleted");
+      console.log("User deleted");
     } catch (err) {
-      toast.error(apiError(err, "Could not delete user"));
+      console.error(apiError(err, "Could not delete user"));
     }
   };
 

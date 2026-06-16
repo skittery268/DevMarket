@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { ImagePlus, Plus, X } from "lucide-react";
-import { toast } from "sonner";
 
 import { categoryImage, apiError } from "@/lib/format";
 import {
@@ -59,11 +58,11 @@ function CategoryFormDialog({ trigger, category, categories = [], onSubmit }) {
     e.preventDefault();
 
     if (attrs.length === 0) {
-      toast.error("Add at least one allowed attribute");
+      console.error("Add at least one allowed attribute");
       return;
     }
     if (!isEdit && !imageFile) {
-      toast.error("An image is required");
+      console.error("An image is required");
       return;
     }
 
@@ -77,10 +76,10 @@ function CategoryFormDialog({ trigger, category, categories = [], onSubmit }) {
     setLoading(true);
     try {
       await onSubmit(fd);
-      toast.success(isEdit ? "Category updated" : "Category created");
+      console.log(isEdit ? "Category updated" : "Category created");
       setOpen(false);
     } catch (err) {
-      toast.error(apiError(err, "Could not save category"));
+      console.error(apiError(err, "Could not save category"));
     } finally {
       setLoading(false);
     }
