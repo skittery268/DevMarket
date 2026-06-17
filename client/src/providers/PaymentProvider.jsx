@@ -13,10 +13,11 @@ import { fetchCreateCheckoutSession } from "../services/PaymentService";
 export const PaymentProvider = ({ children }) => {
     const [payment, setPayment] = useState(null);
 
-    // Function to create a Stripe checkout session and redirect the user to it
-    const createCheckoutSession = useCallback(async (userOrder) => {
+    // Function to create a Stripe checkout session and redirect the user to it.
+    // userInfo carries the delivery details required by the backend.
+    const createCheckoutSession = useCallback(async (userOrder, userInfo) => {
         try {
-            const res = await fetchCreateCheckoutSession(userOrder);
+            const res = await fetchCreateCheckoutSession(userOrder, userInfo);
 
             setPayment(res.data.data.payment);
 

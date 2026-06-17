@@ -18,7 +18,7 @@ const getUserOrders = catchAsync(async (req, res, next) => {
         .limit(limit)
         .lean()
     
-    const orderCount = await Order.countDocuments();
+    const orderCount = await Order.countDocuments({ userId: req.user._id });
 
     res.status(200).json({
         status: "success",

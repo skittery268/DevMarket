@@ -17,12 +17,12 @@ const getProductReviews = catchAsync(async (req, res, next) => {
 
     const reviews = await Review.find({ productId })
         .populate(["authorId", "commentId"])
-        .sort({ creadetAt: -1 })
+        .sort({ createdAt: -1 })
         .skip((page - 1) * limit)
         .limit(limit)
         .lean();
-    
-    const reviewsCount = await Review.countDocuments();
+
+    const reviewsCount = await Review.countDocuments({ productId });
 
     res.status(200).json({
         status: "success",

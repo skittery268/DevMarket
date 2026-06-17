@@ -22,6 +22,7 @@ import Container from "@/components/common/Container";
 import Loader from "@/components/common/Loader";
 import EmptyState from "@/components/common/EmptyState";
 import ProductGallery from "@/components/product/ProductGallery";
+import ProductReviews from "@/components/product/ProductReviews";
 import QuantityStepper from "@/components/product/QuantityStepper";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -232,6 +233,8 @@ function ProductDetail() {
           </div>
         </motion.div>
       </div>
+
+      <ProductReviews productId={product._id} />
     </Container>
   );
 }

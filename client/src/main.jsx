@@ -24,6 +24,7 @@ import { SocketProvider } from './providers/SocketProvider.jsx';
 import { MessageProvider } from './providers/MessageProvider.jsx';
 import { SearchProvider } from './providers/SearchProvider.jsx';
 import { PaymentProvider } from './providers/PaymentProvider.jsx';
+import { ReviewProvider } from './providers/ReviewProvider.jsx';
 
 // ---------------------------------------IMPORTS---------------------------------------
 
@@ -41,8 +42,10 @@ createRoot(document.getElementById('root')).render(
                     <MessageProvider>
                       <SearchProvider>
                         <PaymentProvider>
-                          <ScrollToTop />
-                          <App />
+                          <ReviewProvider>
+                            <ScrollToTop />
+                            <App />
+                          </ReviewProvider>
                         </PaymentProvider>
                       </SearchProvider>
                     </MessageProvider>

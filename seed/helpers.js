@@ -1,6 +1,8 @@
 // Small, dependency-free helpers used by the seed generator.
 // They build documents that strictly match the Mongoose schemas in /server/models.
 
+const { POSITIVE, NEUTRAL, NEGATIVE } = require("./data/comments");
+
 // Pseudo helpers -------------------------------------------------------------
 
 const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -226,6 +228,51 @@ const buildProductDocs = (pools, categoriesByKey, sellerIds) => {
     return docs;
 };
 
+// Review helpers -------------------------------------------------------------
+
+// A natural-looking rating distribution: mostly 4–5, some 3, few 1–2.
+// (cumulative weights: 5→45%, 4→30%, 3→15%, 2→6%, 1→4%)
+const weightedRating = () => {
+    const r = Math.random();
+    if (r < 0.45) return 5;
+    if (r < 0.75) return 4;
+    if (r < 0.90) return 3;
+    if (r < 0.96) return 2;
+    return 1;
+};
+
+// Pick the fragment pool that matches the rating's sentiment.
+const poolForRating = (rating) => {
+    if (rating >= 4) return POSITIVE;
+    if (rating === 3) return NEUTRAL;
+    return NEGATIVE;
+};
+
+// Compose a unique buyer comment for a given rating. Combines an opener, one or
+// two distinct detail sentences and an optional closer — that yields thousands of
+// combinations, so `used` (a Set of strings) keeps every seeded comment distinct.
+const buildComment = (rating, used) => {
+    const pool = poolForRating(rating);
+
+    for (let attempt = 0; attempt < 25; attempt++) {
+        const opener = pick(pool.openers);
+        const details = pickSome(pool.details, chance(0.5) ? 2 : 1);
+        const closer = chance(0.5) ? pick(pool.closers) : null;
+
+        const content = [opener, ...details, closer].filter(Boolean).join(" ");
+
+        if (!used.has(content)) {
+            used.add(content);
+            return content;
+        }
+    }
+
+    // Extremely unlikely fallback: guarantee uniqueness with a distinct suffix.
+    const unique = `${pick(pool.openers)} ${pick(pool.details)} (#${used.size + 1})`;
+    used.add(unique);
+    return unique;
+};
+
 module.exports = {
     randInt,
     randFloat,
@@ -235,5 +282,7 @@ module.exports = {
     slugify,
     buildImages,
     buildDescription,
-    buildProductDocs
+    buildProductDocs,
+    weightedRating,
+    buildComment
 };
