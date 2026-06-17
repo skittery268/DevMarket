@@ -36,14 +36,10 @@ const productSchema = new mongoose.Schema({
             ref: "User",
             required: [true, "Seller ID is required!"]
         },
-        // comments: [{
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "Comment"
-        // }],
-        // reviews: [{
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "Review"
-        // }]
+        reviewsCount: {
+            type: Number,
+            default: 0
+        }
     },
     attributes: {
         type: mongoose.Schema.Types.Mixed

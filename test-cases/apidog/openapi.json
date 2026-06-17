@@ -19,14 +19,46 @@
     }
   ],
   "tags": [
-    { "name": "Auth", "description": "Authentication & authorization" },
-    { "name": "Users", "description": "User management" },
-    { "name": "Products", "description": "Product CRUD" },
-    { "name": "Categories", "description": "Category CRUD" },
-    { "name": "Chat", "description": "Chat management" },
-    { "name": "Messages", "description": "Message CRUD" },
-    { "name": "Payments", "description": "Stripe payments & webhooks" },
-    { "name": "Search", "description": "Full-text search" }
+    {
+      "name": "Auth",
+      "description": "Authentication & authorization"
+    },
+    {
+      "name": "Users",
+      "description": "User management"
+    },
+    {
+      "name": "Products",
+      "description": "Product CRUD"
+    },
+    {
+      "name": "Categories",
+      "description": "Category CRUD"
+    },
+    {
+      "name": "Chat",
+      "description": "Chat management"
+    },
+    {
+      "name": "Messages",
+      "description": "Message CRUD"
+    },
+    {
+      "name": "Payments",
+      "description": "Stripe payments & webhooks"
+    },
+    {
+      "name": "Search",
+      "description": "Full-text search"
+    },
+    {
+      "name": "Reviews",
+      "description": "Product review CRUD"
+    },
+    {
+      "name": "Orders",
+      "description": "Orders (created by Stripe webhook)"
+    }
   ],
   "components": {
     "securitySchemes": {
@@ -41,124 +73,327 @@
       "SuccessResponse": {
         "type": "object",
         "properties": {
-          "status": { "type": "string", "example": "success" },
-          "message": { "type": "string", "example": "Operation completed successfully!" }
+          "status": {
+            "type": "string",
+            "example": "success"
+          },
+          "message": {
+            "type": "string",
+            "example": "Operation completed successfully!"
+          }
         }
       },
       "ErrorResponse": {
         "type": "object",
         "properties": {
-          "status": { "type": "string", "example": "fail" },
-          "message": { "type": "string", "example": "Error description" },
-          "errors": { "type": "array", "items": { "type": "object" }, "nullable": true }
+          "status": {
+            "type": "string",
+            "example": "fail"
+          },
+          "message": {
+            "type": "string",
+            "example": "Error description"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            },
+            "nullable": true
+          }
         }
       },
       "User": {
         "type": "object",
         "properties": {
-          "_id": { "type": "string", "example": "64f1b2c3d4e5f6a7b8c9d0e1" },
-          "fullname": { "type": "string", "example": "John Doe" },
-          "email": { "type": "string", "format": "email", "example": "john.doe@example.com" },
-          "role": { "type": "string", "enum": ["user", "seller", "admin"], "example": "user" },
-          "isVerified": { "type": "boolean", "example": true },
-          "isDeleted": { "type": "boolean", "example": false },
+          "_id": {
+            "type": "string",
+            "example": "64f1b2c3d4e5f6a7b8c9d0e1"
+          },
+          "fullname": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "example": "john.doe@example.com"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "user",
+              "seller",
+              "admin"
+            ],
+            "example": "user"
+          },
+          "isVerified": {
+            "type": "boolean",
+            "example": true
+          },
+          "isDeleted": {
+            "type": "boolean",
+            "example": false
+          },
           "avatar": {
             "type": "object",
             "properties": {
-              "url": { "type": "string", "example": "https://res.cloudinary.com/..." },
-              "public_id": { "type": "string", "example": "userAvatars/abc123" }
+              "url": {
+                "type": "string",
+                "example": "https://res.cloudinary.com/..."
+              },
+              "public_id": {
+                "type": "string",
+                "example": "userAvatars/abc123"
+              }
             }
           },
-          "provider": { "type": "string", "enum": ["local", "google"], "example": "local" },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "updatedAt": { "type": "string", "format": "date-time" }
+          "provider": {
+            "type": "string",
+            "enum": [
+              "local",
+              "google"
+            ],
+            "example": "local"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "Product": {
         "type": "object",
         "properties": {
-          "_id": { "type": "string", "example": "64f1b2c3d4e5f6a7b8c9d0e1" },
+          "_id": {
+            "type": "string",
+            "example": "64f1b2c3d4e5f6a7b8c9d0e1"
+          },
           "universal": {
             "type": "object",
             "properties": {
-              "title": { "type": "string", "example": "Gaming Laptop Pro" },
-              "description": { "type": "string", "example": "High-performance gaming laptop with RTX 4090" },
-              "price": { "type": "number", "example": 1499.99 },
-              "stock": { "type": "number", "example": 5 },
+              "title": {
+                "type": "string",
+                "example": "Gaming Laptop Pro"
+              },
+              "description": {
+                "type": "string",
+                "example": "High-performance gaming laptop with RTX 4090"
+              },
+              "price": {
+                "type": "number",
+                "example": 1499.99
+              },
+              "stock": {
+                "type": "number",
+                "example": 5
+              },
               "images": {
                 "type": "array",
                 "items": {
                   "type": "object",
                   "properties": {
-                    "url": { "type": "string" },
-                    "public_id": { "type": "string" }
+                    "url": {
+                      "type": "string"
+                    },
+                    "public_id": {
+                      "type": "string"
+                    }
                   }
                 }
               },
-              "category": { "$ref": "#/components/schemas/Category" },
-              "sellerId": { "$ref": "#/components/schemas/User" },
-              "comments": { "type": "array", "items": { "type": "string" } },
-              "reviews": { "type": "array", "items": { "type": "string" } }
+              "category": {
+                "$ref": "#/components/schemas/Category"
+              },
+              "sellerId": {
+                "$ref": "#/components/schemas/User"
+              },
+              "comments": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "reviews": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
             }
           },
-          "attributes": { "type": "object", "additionalProperties": { "type": "string" }, "example": { "color": "black", "storage": "1TB" } },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "updatedAt": { "type": "string", "format": "date-time" }
+          "attributes": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "color": "black",
+              "storage": "1TB"
+            }
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "Category": {
         "type": "object",
         "properties": {
-          "_id": { "type": "string", "example": "64f1b2c3d4e5f6a7b8c9d0e1" },
-          "name": { "type": "string", "example": "Electronics" },
-          "description": { "type": "string", "example": "All electronic devices and accessories" },
+          "_id": {
+            "type": "string",
+            "example": "64f1b2c3d4e5f6a7b8c9d0e1"
+          },
+          "name": {
+            "type": "string",
+            "example": "Electronics"
+          },
+          "description": {
+            "type": "string",
+            "example": "All electronic devices and accessories"
+          },
           "image": {
             "type": "object",
             "properties": {
-              "url": { "type": "string" },
-              "public_id": { "type": "string" }
+              "url": {
+                "type": "string"
+              },
+              "public_id": {
+                "type": "string"
+              }
             }
           },
-          "isActive": { "type": "boolean", "example": true },
-          "parentCategory": { "type": "string", "nullable": true, "example": null },
-          "allowedAttributes": { "type": "array", "items": { "type": "string" }, "example": ["brand", "color", "storage"] },
-          "createdAt": { "type": "string", "format": "date-time" }
+          "isActive": {
+            "type": "boolean",
+            "example": true
+          },
+          "parentCategory": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          },
+          "allowedAttributes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "brand",
+              "color",
+              "storage"
+            ]
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "Chat": {
         "type": "object",
         "properties": {
-          "_id": { "type": "string", "example": "64f1b2c3d4e5f6a7b8c9d0e3" },
-          "product": { "$ref": "#/components/schemas/Product" },
-          "seller": { "$ref": "#/components/schemas/User" },
-          "buyer": { "$ref": "#/components/schemas/User" },
-          "lastMessage": { "type": "string", "nullable": true },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "updatedAt": { "type": "string", "format": "date-time" }
+          "_id": {
+            "type": "string",
+            "example": "64f1b2c3d4e5f6a7b8c9d0e3"
+          },
+          "product": {
+            "$ref": "#/components/schemas/Product"
+          },
+          "seller": {
+            "$ref": "#/components/schemas/User"
+          },
+          "buyer": {
+            "$ref": "#/components/schemas/User"
+          },
+          "lastMessage": {
+            "type": "string",
+            "nullable": true
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "Message": {
         "type": "object",
         "properties": {
-          "_id": { "type": "string", "example": "64f1b2c3d4e5f6a7b8c9d0e4" },
-          "chat": { "type": "string", "example": "64f1b2c3d4e5f6a7b8c9d0e3" },
-          "sender": { "$ref": "#/components/schemas/User" },
-          "content": { "type": "string", "example": "Hello, is this still available?" },
-          "isRead": { "type": "boolean", "example": false },
-          "createdAt": { "type": "string", "format": "date-time" }
+          "_id": {
+            "type": "string",
+            "example": "64f1b2c3d4e5f6a7b8c9d0e4"
+          },
+          "chat": {
+            "type": "string",
+            "example": "64f1b2c3d4e5f6a7b8c9d0e3"
+          },
+          "sender": {
+            "$ref": "#/components/schemas/User"
+          },
+          "content": {
+            "type": "string",
+            "example": "Hello, is this still available?"
+          },
+          "isRead": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "Payment": {
         "type": "object",
         "properties": {
-          "_id": { "type": "string" },
-          "userId": { "type": "string" },
-          "stripeSessionId": { "type": "string", "example": "cs_test_a1b2c3..." },
-          "totalAmount": { "type": "number", "example": 149.99 },
-          "platformCommission": { "type": "number", "example": 7.5 },
-          "sellerNetAmount": { "type": "number", "example": 142.49 },
-          "status": { "type": "string", "enum": ["pending", "succeeded", "failed", "canceled"] },
-          "webhookProcessed": { "type": "boolean" }
+          "_id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "stripeSessionId": {
+            "type": "string",
+            "example": "cs_test_a1b2c3..."
+          },
+          "totalAmount": {
+            "type": "number",
+            "example": 149.99
+          },
+          "platformCommission": {
+            "type": "number",
+            "example": 7.5
+          },
+          "sellerNetAmount": {
+            "type": "number",
+            "example": 142.49
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "succeeded",
+              "failed",
+              "canceled"
+            ]
+          },
+          "webhookProcessed": {
+            "type": "boolean"
+          }
         }
       }
     },
@@ -167,14 +402,23 @@
         "name": "page",
         "in": "query",
         "required": false,
-        "schema": { "type": "integer", "minimum": 1, "example": 1 },
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "example": 1
+        },
         "description": "Page number (1-based)"
       },
       "LimitParam": {
         "name": "limit",
         "in": "query",
         "required": false,
-        "schema": { "type": "integer", "minimum": 1, "maximum": 100, "example": 10 },
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "example": 10
+        },
         "description": "Number of items per page"
       }
     },
@@ -183,8 +427,13 @@
         "description": "No auth cookie or invalid token",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-            "example": { "status": "fail", "message": "Token not found!" }
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "status": "fail",
+              "message": "Token not found!"
+            }
           }
         }
       },
@@ -192,8 +441,13 @@
         "description": "Insufficient role permissions",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-            "example": { "status": "fail", "message": "Access denied!" }
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "status": "fail",
+              "message": "Access denied!"
+            }
           }
         }
       },
@@ -201,8 +455,13 @@
         "description": "Resource not found",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-            "example": { "status": "fail", "message": "Resource not found!" }
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "status": "fail",
+              "message": "Resource not found!"
+            }
           }
         }
       },
@@ -210,8 +469,14 @@
         "description": "Validation failed",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-            "example": { "status": "fail", "message": "Validation failed", "errors": [] }
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "status": "fail",
+              "message": "Validation failed",
+              "errors": []
+            }
           }
         }
       },
@@ -219,8 +484,13 @@
         "description": "Rate limit exceeded",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-            "example": { "status": "fail", "message": "Too many requests. Please try again later." }
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "example": {
+              "status": "fail",
+              "message": "Too many requests. Please try again later."
+            }
           }
         }
       }
@@ -229,7 +499,9 @@
   "paths": {
     "/auth/register": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Register a new user",
         "description": "Creates a new user account and sends a verification email. Rate limit: 5 requests per 60 minutes.",
         "requestBody": {
@@ -238,7 +510,11 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["fullname", "email", "password"],
+                "required": [
+                  "fullname",
+                  "email",
+                  "password"
+                ],
                 "additionalProperties": false,
                 "properties": {
                   "fullname": {
@@ -263,15 +539,27 @@
               "examples": {
                 "valid": {
                   "summary": "Valid registration",
-                  "value": { "fullname": "John Doe", "email": "john.doe@example.com", "password": "SecurePass123" }
+                  "value": {
+                    "fullname": "John Doe",
+                    "email": "john.doe@example.com",
+                    "password": "SecurePass123"
+                  }
                 },
                 "shortFullname": {
                   "summary": "Fullname too short",
-                  "value": { "fullname": "Jo", "email": "test@example.com", "password": "Password123" }
+                  "value": {
+                    "fullname": "Jo",
+                    "email": "test@example.com",
+                    "password": "Password123"
+                  }
                 },
                 "invalidEmail": {
                   "summary": "Invalid email",
-                  "value": { "fullname": "John Doe", "email": "not-an-email", "password": "Password123" }
+                  "value": {
+                    "fullname": "John Doe",
+                    "email": "not-an-email",
+                    "password": "Password123"
+                  }
                 }
               }
             }
@@ -282,19 +570,30 @@
             "description": "User registered successfully",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" },
-                "example": { "status": "success", "message": "User registered successfully!" }
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "status": "success",
+                  "message": "User registered successfully!"
+                }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/ValidationError" },
-          "429": { "$ref": "#/components/responses/TooManyRequests" }
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
         }
       }
     },
     "/auth/login": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Login user",
         "description": "Authenticates user and sets HttpOnly `authToken` cookie. Rate limit: 5 requests per 15 minutes.",
         "requestBody": {
@@ -303,25 +602,50 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["email", "password"],
+                "required": [
+                  "email",
+                  "password"
+                ],
                 "additionalProperties": false,
                 "properties": {
-                  "email": { "type": "string", "format": "email", "example": "john.doe@example.com" },
-                  "password": { "type": "string", "minLength": 1, "maxLength": 50, "example": "SecurePass123" }
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "john.doe@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 50,
+                    "example": "SecurePass123"
+                  }
                 }
               },
               "examples": {
                 "valid": {
                   "summary": "Valid credentials",
-                  "value": { "email": "john.doe@example.com", "password": "SecurePass123" }
+                  "value": {
+                    "email": "john.doe@example.com",
+                    "password": "SecurePass123"
+                  }
                 },
                 "wrongPassword": {
                   "summary": "Wrong password",
-                  "value": { "email": "john.doe@example.com", "password": "WrongPassword" }
+                  "value": {
+                    "email": "john.doe@example.com",
+                    "password": "WrongPassword"
+                  }
                 },
                 "nosqlInjection": {
                   "summary": "NoSQL injection attempt",
-                  "value": { "email": { "$gt": "" }, "password": { "$gt": "" } }
+                  "value": {
+                    "email": {
+                      "$gt": ""
+                    },
+                    "password": {
+                      "$gt": ""
+                    }
+                  }
                 }
               }
             }
@@ -332,7 +656,10 @@
             "description": "Login successful — sets authToken cookie",
             "headers": {
               "Set-Cookie": {
-                "schema": { "type": "string", "example": "authToken=eyJhbGci...; HttpOnly; SameSite=Lax; Path=/" }
+                "schema": {
+                  "type": "string",
+                  "example": "authToken=eyJhbGci...; HttpOnly; SameSite=Lax; Path=/"
+                }
               }
             },
             "content": {
@@ -340,11 +667,21 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "message": { "type": "string", "example": "Login successfully!" },
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Login successfully!"
+                    },
                     "data": {
                       "type": "object",
-                      "properties": { "user": { "$ref": "#/components/schemas/User" } }
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
                     }
                   }
                 }
@@ -355,10 +692,22 @@
             "description": "Invalid credentials or account not verified",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
                 "examples": {
-                  "wrongCreds": { "value": { "status": "fail", "message": "Credentials incorrect!" } },
-                  "notVerified": { "value": { "status": "fail", "message": "Please complete verification first." } }
+                  "wrongCreds": {
+                    "value": {
+                      "status": "fail",
+                      "message": "Credentials incorrect!"
+                    }
+                  },
+                  "notVerified": {
+                    "value": {
+                      "status": "fail",
+                      "message": "Please complete verification first."
+                    }
+                  }
                 }
               }
             }
@@ -367,18 +716,27 @@
             "description": "Account deleted",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-                "example": { "status": "fail", "message": "This account has been deleted!" }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "status": "fail",
+                  "message": "This account has been deleted!"
+                }
               }
             }
           },
-          "429": { "$ref": "#/components/responses/TooManyRequests" }
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
         }
       }
     },
     "/auth/verification": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Verify email address",
         "description": "Verifies user email via token from verification email link. Rate limit: 3 requests per 10 minutes.",
         "parameters": [
@@ -386,7 +744,9 @@
             "name": "token",
             "in": "query",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "JWT verification token from email",
             "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
           }
@@ -396,7 +756,10 @@
             "description": "Email verified — returns HTML page",
             "content": {
               "text/html": {
-                "schema": { "type": "string", "example": "<h1>Verification successfully, you can come back!</h1>" }
+                "schema": {
+                  "type": "string",
+                  "example": "<h1>Verification successfully, you can come back!</h1>"
+                }
               }
             }
           },
@@ -404,25 +767,50 @@
             "description": "Missing, invalid, or already verified token",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
                 "examples": {
-                  "missing": { "value": { "status": "fail", "message": "Token is required!" } },
-                  "invalid": { "value": { "status": "fail", "message": "Invalid token!" } },
-                  "alreadyVerified": { "value": { "status": "fail", "message": "Your account already varified!" } }
+                  "missing": {
+                    "value": {
+                      "status": "fail",
+                      "message": "Token is required!"
+                    }
+                  },
+                  "invalid": {
+                    "value": {
+                      "status": "fail",
+                      "message": "Invalid token!"
+                    }
+                  },
+                  "alreadyVerified": {
+                    "value": {
+                      "status": "fail",
+                      "message": "Your account already varified!"
+                    }
+                  }
                 }
               }
             }
           },
-          "429": { "$ref": "#/components/responses/TooManyRequests" }
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
         }
       }
     },
     "/auth/me": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Get current authenticated user",
         "description": "Returns the currently authenticated user based on the authToken cookie.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Current user data",
@@ -431,44 +819,71 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "message": { "type": "string", "example": "Auto login successfully!" },
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Auto login successfully!"
+                    },
                     "data": {
                       "type": "object",
-                      "properties": { "user": { "$ref": "#/components/schemas/User" } }
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
                     }
                   }
                 }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/Unauthorized" }
+          "404": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
         }
       }
     },
     "/auth/logout": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Logout user",
         "description": "Clears the authToken cookie.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Logged out successfully",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" },
-                "example": { "status": "success", "message": "Logout successfully!" }
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "status": "success",
+                  "message": "Logout successfully!"
+                }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/Unauthorized" }
+          "404": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
         }
       }
     },
     "/auth/google": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Initiate Google OAuth",
         "description": "Redirects to Google authentication page. Scope: profile, email.",
         "responses": {
@@ -480,19 +895,42 @@
     },
     "/auth/google/callback": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Google OAuth callback",
         "description": "Handles Google OAuth callback. Sets authToken cookie and redirects to CLIENT_URL.",
         "parameters": [
-          { "name": "code", "in": "query", "schema": { "type": "string" } },
-          { "name": "state", "in": "query", "schema": { "type": "string" } }
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "state",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "302": {
             "description": "Redirect to client app after successful auth",
             "headers": {
-              "Set-Cookie": { "schema": { "type": "string" } },
-              "Location": { "schema": { "type": "string", "example": "http://localhost:5173" } }
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "Location": {
+                "schema": {
+                  "type": "string",
+                  "example": "http://localhost:5173"
+                }
+              }
             }
           }
         }
@@ -500,12 +938,18 @@
     },
     "/user": {
       "get": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Get paginated list of users",
         "description": "Public endpoint. Returns all users sorted by creation date (newest first).",
         "parameters": [
-          { "$ref": "#/components/parameters/PageParam" },
-          { "$ref": "#/components/parameters/LimitParam" }
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          }
         ],
         "responses": {
           "200": {
@@ -515,12 +959,23 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string", "example": "success" },
-                    "message": { "type": "string", "example": "Users returned successfully!" },
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Users returned successfully!"
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "users": { "type": "array", "items": { "$ref": "#/components/schemas/User" } }
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/User"
+                          }
+                        }
                       }
                     }
                   }
@@ -533,16 +988,25 @@
     },
     "/user/{userId}": {
       "delete": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Soft-delete a user",
         "description": "Sets isDeleted=true and deletedAt. User can only delete own account (admin role check has a bug — currently admins cannot delete others).",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "pattern": "^[0-9a-fA-F]{24}$" },
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e1"
           }
         ],
@@ -551,28 +1015,45 @@
             "description": "User deleted (soft delete)",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" },
-                "example": { "status": "success", "message": "User deleted successfully!" }
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "status": "success",
+                  "message": "User deleted successfully!"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/user/edit-user/{userId}": {
       "patch": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Edit user profile",
         "description": "Update fullname, email, password, or avatar. User can only edit own profile. Changing email resets isVerified and sends a new verification link.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e1"
           }
         ],
@@ -583,11 +1064,34 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                  "fullname": { "type": "string", "minLength": 5, "maxLength": 50, "example": "Jane Doe" },
-                  "email": { "type": "string", "format": "email", "example": "newemail@example.com" },
-                  "currentPassword": { "type": "string", "minLength": 8, "maxLength": 50, "example": "OldPassword123" },
-                  "newPassword": { "type": "string", "minLength": 8, "maxLength": 50, "example": "NewPassword456" },
-                  "image": { "type": "string", "format": "binary", "description": "Avatar image file" }
+                  "fullname": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 50,
+                    "example": "Jane Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "newemail@example.com"
+                  },
+                  "currentPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 50,
+                    "example": "OldPassword123"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "minLength": 8,
+                    "maxLength": 50,
+                    "example": "NewPassword456"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Avatar image file"
+                  }
                 }
               }
             }
@@ -601,32 +1105,57 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "message": { "type": "string" },
-                    "data": { "type": "object", "properties": { "user": { "$ref": "#/components/schemas/User" } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "$ref": "#/components/schemas/User"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/ValidationError" },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/user/change-role/{userId}": {
       "patch": {
-        "tags": ["Users"],
+        "tags": [
+          "Users"
+        ],
         "summary": "Change user role (admin only)",
         "description": "Changes the role of a user. Admin only. Cannot change another admin's role. **BUG:** role validation logic is inverted — all valid role values are currently rejected.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "userId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e1"
           }
         ],
@@ -636,10 +1165,20 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["role"],
+                "required": [
+                  "role"
+                ],
                 "additionalProperties": false,
                 "properties": {
-                  "role": { "type": "string", "enum": ["user", "seller", "admin"], "example": "seller" }
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "user",
+                      "seller",
+                      "admin"
+                    ],
+                    "example": "seller"
+                  }
                 }
               }
             }
@@ -650,24 +1189,39 @@
             "description": "Role changed (after bug fix)",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" },
-                "example": { "status": "success", "message": "User role changed successfully!" }
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "status": "success",
+                  "message": "User role changed successfully!"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/product": {
       "get": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Get paginated list of products",
         "description": "Public endpoint. Returns products with populated category, sellerId, comments, and reviews.",
         "parameters": [
-          { "$ref": "#/components/parameters/PageParam" },
-          { "$ref": "#/components/parameters/LimitParam" }
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          }
         ],
         "responses": {
           "200": {
@@ -677,13 +1231,25 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "message": { "type": "string" },
-                    "productCount": { "type": "integer", "example": 42 },
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "productCount": {
+                      "type": "integer",
+                      "example": 42
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "products": { "type": "array", "items": { "$ref": "#/components/schemas/Product" } }
+                        "products": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Product"
+                          }
+                        }
                       }
                     }
                   }
@@ -696,16 +1262,25 @@
     },
     "/product/createProduct/{categoryId}": {
       "post": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Create a new product",
         "description": "Creates a product under the specified category. Requires seller or admin role. Up to 5 images. Category must be active and attributes must match category's allowedAttributes.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "categoryId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string", "pattern": "^[0-9a-fA-F]{24}$" },
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e1"
           }
         ],
@@ -715,15 +1290,54 @@
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["title", "description", "price", "stock"],
+                "required": [
+                  "title",
+                  "description",
+                  "price",
+                  "stock"
+                ],
                 "additionalProperties": false,
                 "properties": {
-                  "title": { "type": "string", "minLength": 5, "maxLength": 100, "example": "Gaming Laptop Pro" },
-                  "description": { "type": "string", "minLength": 10, "maxLength": 1000, "example": "High-performance gaming laptop with RTX 4090 and 32GB RAM" },
-                  "price": { "type": "number", "minimum": 1, "example": 1499.99 },
-                  "stock": { "type": "number", "minimum": 1, "example": 5 },
-                  "attributes": { "type": "object", "additionalProperties": { "type": "string" }, "example": { "color": "black", "storage": "1TB" } },
-                  "images": { "type": "array", "items": { "type": "string", "format": "binary" }, "maxItems": 5 }
+                  "title": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 100,
+                    "example": "Gaming Laptop Pro"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 1000,
+                    "example": "High-performance gaming laptop with RTX 4090 and 32GB RAM"
+                  },
+                  "price": {
+                    "type": "number",
+                    "minimum": 1,
+                    "example": 1499.99
+                  },
+                  "stock": {
+                    "type": "number",
+                    "minimum": 1,
+                    "example": 5
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    },
+                    "example": {
+                      "color": "black",
+                      "storage": "1TB"
+                    }
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "maxItems": 5
+                  }
                 }
               }
             }
@@ -737,32 +1351,57 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "message": { "type": "string" },
-                    "data": { "type": "object", "properties": { "product": { "$ref": "#/components/schemas/Product" } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "product": {
+                          "$ref": "#/components/schemas/Product"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/ValidationError" },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/product/editproduct/{productId}": {
       "patch": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Edit a product",
         "description": "Updates product fields. Only the product owner (seller) can edit. If new images are provided, old ones are deleted from Cloudinary.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "productId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e1"
           }
         ],
@@ -773,12 +1412,38 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                  "title": { "type": "string", "minLength": 5, "maxLength": 100 },
-                  "description": { "type": "string", "minLength": 10, "maxLength": 1000 },
-                  "price": { "type": "number", "minimum": 1 },
-                  "stock": { "type": "number", "minimum": 1 },
-                  "attributes": { "type": "object", "additionalProperties": { "type": "string" } },
-                  "images": { "type": "array", "items": { "type": "string", "format": "binary" }, "maxItems": 5 }
+                  "title": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 100
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 1000
+                  },
+                  "price": {
+                    "type": "number",
+                    "minimum": 1
+                  },
+                  "stock": {
+                    "type": "number",
+                    "minimum": 1
+                  },
+                  "attributes": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string"
+                    }
+                  },
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    },
+                    "maxItems": 5
+                  }
                 }
               }
             }
@@ -792,30 +1457,51 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "data": { "type": "object", "properties": { "product": { "$ref": "#/components/schemas/Product" } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "product": {
+                          "$ref": "#/components/schemas/Product"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/product/deleteproduct/{productId}": {
       "delete": {
-        "tags": ["Products"],
+        "tags": [
+          "Products"
+        ],
         "summary": "Delete a product",
         "description": "Deletes a product from DB and removes all images from Cloudinary. Product owner or admin can delete.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "productId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e1"
           }
         ],
@@ -824,24 +1510,39 @@
             "description": "Product deleted",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" },
-                "example": { "status": "success", "message": "Product deleted successfully!" }
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "status": "success",
+                  "message": "Product deleted successfully!"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/category": {
       "get": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Get paginated list of categories",
         "description": "Public endpoint. Returns categories with populated parentCategory.",
         "parameters": [
-          { "$ref": "#/components/parameters/PageParam" },
-          { "$ref": "#/components/parameters/LimitParam" }
+          {
+            "$ref": "#/components/parameters/PageParam"
+          },
+          {
+            "$ref": "#/components/parameters/LimitParam"
+          }
         ],
         "responses": {
           "200": {
@@ -851,12 +1552,21 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "categoryCount": { "type": "integer" },
+                    "status": {
+                      "type": "string"
+                    },
+                    "categoryCount": {
+                      "type": "integer"
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "categories": { "type": "array", "items": { "$ref": "#/components/schemas/Category" } }
+                        "categories": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Category"
+                          }
+                        }
                       }
                     }
                   }
@@ -869,24 +1579,64 @@
     },
     "/category/createcategory": {
       "post": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Create a new category (admin only)",
         "description": "Creates a category with an image uploaded to Cloudinary. Image is required (will crash without it — BUG: no null check on req.file).",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "multipart/form-data": {
               "schema": {
                 "type": "object",
-                "required": ["name", "description", "allowedAttributes", "image"],
+                "required": [
+                  "name",
+                  "description",
+                  "allowedAttributes",
+                  "image"
+                ],
                 "additionalProperties": false,
                 "properties": {
-                  "name": { "type": "string", "minLength": 5, "maxLength": 50, "example": "Electronics" },
-                  "description": { "type": "string", "minLength": 10, "maxLength": 500, "example": "All electronic devices and accessories" },
-                  "allowedAttributes": { "type": "array", "items": { "type": "string" }, "minItems": 1, "example": ["brand", "color", "storage"] },
-                  "parentCategory": { "type": "string", "pattern": "^[0-9a-fA-F]{24}$", "example": "64f1b2c3d4e5f6a7b8c9d0e1" },
-                  "image": { "type": "string", "format": "binary", "description": "Category image (required)" }
+                  "name": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 50,
+                    "example": "Electronics"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 500,
+                    "example": "All electronic devices and accessories"
+                  },
+                  "allowedAttributes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1,
+                    "example": [
+                      "brand",
+                      "color",
+                      "storage"
+                    ]
+                  },
+                  "parentCategory": {
+                    "type": "string",
+                    "pattern": "^[0-9a-fA-F]{24}$",
+                    "example": "64f1b2c3d4e5f6a7b8c9d0e1"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Category image (required)"
+                  }
                 }
               }
             }
@@ -900,30 +1650,51 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "data": { "type": "object", "properties": { "category": { "$ref": "#/components/schemas/Category" } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "category": {
+                          "$ref": "#/components/schemas/Category"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/ValidationError" },
-          "401": { "$ref": "#/components/responses/Forbidden" }
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          }
         }
       }
     },
     "/category/editcategory/{id}": {
       "patch": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Edit a category (admin only)",
         "description": "Updates category fields. If a new image is provided, the old one is deleted from Cloudinary.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e1"
           }
         ],
@@ -934,11 +1705,31 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                  "name": { "type": "string", "minLength": 5, "maxLength": 50 },
-                  "description": { "type": "string", "minLength": 10, "maxLength": 500 },
-                  "allowedAttributes": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
-                  "parentCategory": { "type": "string", "pattern": "^[0-9a-fA-F]{24}$" },
-                  "image": { "type": "string", "format": "binary" }
+                  "name": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 50
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 10,
+                    "maxLength": 500
+                  },
+                  "allowedAttributes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "minItems": 1
+                  },
+                  "parentCategory": {
+                    "type": "string",
+                    "pattern": "^[0-9a-fA-F]{24}$"
+                  },
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
                 }
               }
             }
@@ -952,30 +1743,51 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "data": { "type": "object", "properties": { "category": { "$ref": "#/components/schemas/Category" } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "category": {
+                          "$ref": "#/components/schemas/Category"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/category/deletecategory/{id}": {
       "delete": {
-        "tags": ["Categories"],
+        "tags": [
+          "Categories"
+        ],
         "summary": "Delete a category (admin only)",
         "description": "Deletes category and its image from Cloudinary. BUG: crashes on non-existent ID (no null check).",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e1"
           }
         ],
@@ -984,22 +1796,37 @@
             "description": "Category deleted",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" },
-                "example": { "status": "success", "message": "Category deleted successfully!" }
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "status": "success",
+                  "message": "Category deleted successfully!"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "500": { "description": "Crash on non-existent ID (bug — no null check)" }
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "500": {
+            "description": "Crash on non-existent ID (bug — no null check)"
+          }
         }
       }
     },
     "/chat": {
       "get": {
-        "tags": ["Chat"],
+        "tags": [
+          "Chat"
+        ],
         "summary": "Get chats for current user",
         "description": "Returns all chats where the current user is buyer or seller. **BUG:** route defined before protect middleware — unauthenticated requests crash the server.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Chats list",
@@ -1008,8 +1835,20 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "data": { "type": "object", "properties": { "chats": { "type": "array", "items": { "$ref": "#/components/schemas/Chat" } } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chats": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Chat"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1018,21 +1857,38 @@
         }
       },
       "post": {
-        "tags": ["Chat"],
+        "tags": [
+          "Chat"
+        ],
         "summary": "Create or get existing chat",
         "description": "Creates a chat between the current user (buyer) and a seller about a product. Idempotent — returns existing chat if one already exists for same product+seller+buyer combination.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["productId", "sellerId"],
+                "required": [
+                  "productId",
+                  "sellerId"
+                ],
                 "additionalProperties": false,
                 "properties": {
-                  "productId": { "type": "string", "pattern": "^[0-9a-fA-F]{24}$", "example": "64f1b2c3d4e5f6a7b8c9d0e1" },
-                  "sellerId": { "type": "string", "pattern": "^[0-9a-fA-F]{24}$", "example": "64f1b2c3d4e5f6a7b8c9d0e2" }
+                  "productId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-fA-F]{24}$",
+                    "example": "64f1b2c3d4e5f6a7b8c9d0e1"
+                  },
+                  "sellerId": {
+                    "type": "string",
+                    "pattern": "^[0-9a-fA-F]{24}$",
+                    "example": "64f1b2c3d4e5f6a7b8c9d0e2"
+                  }
                 }
               }
             }
@@ -1046,30 +1902,51 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "data": { "type": "object", "properties": { "chat": { "$ref": "#/components/schemas/Chat" } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "chat": {
+                          "$ref": "#/components/schemas/Chat"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "400": { "$ref": "#/components/responses/ValidationError" },
-          "404": { "$ref": "#/components/responses/Unauthorized" }
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
         }
       }
     },
     "/chat/{chatId}": {
       "delete": {
-        "tags": ["Chat"],
+        "tags": [
+          "Chat"
+        ],
         "summary": "Delete chat and all its messages",
         "description": "Deletes a chat and all associated messages. **Security note:** no ownership check — any authenticated user can delete any chat.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "chatId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e3"
           }
         ],
@@ -1078,18 +1955,27 @@
             "description": "Chat deleted",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" },
-                "example": { "status": "success", "message": "Chat deleted successfully!" }
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "status": "success",
+                  "message": "Chat deleted successfully!"
+                }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/message": {
       "get": {
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "summary": "Get messages for a chat",
         "description": "**BUG (×2):** (1) Route not protected — no auth required. (2) Controller reads chatId from req.params but route has no :chatId param — chatId is always undefined → always returns empty array. After fix, chatId should come from query param.",
         "parameters": [
@@ -1097,7 +1983,9 @@
             "name": "chatId",
             "in": "query",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Chat ID (will work after bug fix — currently reads from req.params which is undefined)",
             "example": "64f1b2c3d4e5f6a7b8c9d0e3"
           }
@@ -1110,8 +1998,20 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "data": { "type": "object", "properties": { "messages": { "type": "array", "items": { "$ref": "#/components/schemas/Message" } } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "messages": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Message"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1120,19 +2020,30 @@
         }
       },
       "post": {
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "summary": "Send a message",
         "description": "Sends a message in a chat. Emits socket.io 'newMessage' event. **BUG:** controller reads chatId from req.params but route has no :chatId param — message is created with chat: undefined.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["content"],
+                "required": [
+                  "content"
+                ],
                 "properties": {
-                  "content": { "type": "string", "example": "Hello, is this item still available?" }
+                  "content": {
+                    "type": "string",
+                    "example": "Hello, is this item still available?"
+                  }
                 }
               }
             }
@@ -1146,29 +2057,48 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "data": { "type": "object", "properties": { "message": { "$ref": "#/components/schemas/Message" } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "$ref": "#/components/schemas/Message"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/Unauthorized" }
+          "404": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
         }
       }
     },
     "/message/{messageId}": {
       "delete": {
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "summary": "Delete a message",
         "description": "Deletes a message. Only the sender can delete their own messages. Emits socket.io 'deleteMessage' event.",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "messageId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e4"
           }
         ],
@@ -1177,26 +2107,43 @@
             "description": "Message deleted",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" },
-                "example": { "status": "success", "message": "Message deleted successfully!" }
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                },
+                "example": {
+                  "status": "success",
+                  "message": "Message deleted successfully!"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       },
       "patch": {
-        "tags": ["Messages"],
+        "tags": [
+          "Messages"
+        ],
         "summary": "Edit a message",
         "description": "Updates message content. Only the sender can edit. Emits socket.io 'editMessage' event. Note: empty content string is treated as no-op (content not updated).",
-        "security": [{ "cookieAuth": [] }],
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "parameters": [
           {
             "name": "messageId",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "64f1b2c3d4e5f6a7b8c9d0e4"
           }
         ],
@@ -1207,7 +2154,10 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "content": { "type": "string", "example": "Updated message content" }
+                  "content": {
+                    "type": "string",
+                    "example": "Updated message content"
+                  }
                 }
               }
             }
@@ -1221,41 +2171,120 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "data": { "type": "object", "properties": { "message": { "$ref": "#/components/schemas/Message" } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "$ref": "#/components/schemas/Message"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "401": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
         }
       }
     },
     "/payment/checkout": {
       "post": {
-        "tags": ["Payments"],
+        "tags": [
+          "Payments"
+        ],
         "summary": "Create Stripe checkout session",
-        "description": "Creates a Stripe checkout session for a cart of products. Platform takes 5% commission. Each seller must have stripeAccountId set (BUG: User model missing this field). Rate limited.",
-        "security": [{ "cookieAuth": [] }],
+        "description": "Creates a Stripe checkout session for a cart of products. Platform takes 5% commission. The seller stripeAccountId gate and Stripe Connect transfers are currently commented out, so checkout succeeds without connected seller accounts. Creates a pending Payment (the Order is created later by the webhook). Rate limited.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["userOrder"],
+                "required": [
+                  "userOrder",
+                  "userInfo"
+                ],
                 "properties": {
                   "userOrder": {
                     "type": "array",
                     "minItems": 1,
                     "items": {
                       "type": "object",
-                      "required": ["id", "quantity"],
+                      "required": [
+                        "id",
+                        "quantity"
+                      ],
                       "properties": {
-                        "id": { "type": "string", "pattern": "^[0-9a-fA-F]{24}$", "description": "Product ObjectId", "example": "64f1b2c3d4e5f6a7b8c9d0e1" },
-                        "quantity": { "type": "integer", "minimum": 1, "description": "Must be a positive integer (not float)", "example": 2 }
+                        "id": {
+                          "type": "string",
+                          "pattern": "^[0-9a-fA-F]{24}$",
+                          "description": "Product ObjectId",
+                          "example": "64f1b2c3d4e5f6a7b8c9d0e1"
+                        },
+                        "quantity": {
+                          "type": "integer",
+                          "minimum": 1,
+                          "description": "Must be a positive integer (not float)",
+                          "example": 2
+                        }
+                      }
+                    }
+                  },
+                  "userInfo": {
+                    "type": "object",
+                    "description": "Shipping / contact info, persisted on the Payment and copied to the Order",
+                    "required": [
+                      "fullname",
+                      "email",
+                      "city",
+                      "country",
+                      "address",
+                      "phone",
+                      "zipcode"
+                    ],
+                    "properties": {
+                      "fullname": {
+                        "type": "string",
+                        "example": "John Doe"
+                      },
+                      "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "john@example.com"
+                      },
+                      "city": {
+                        "type": "string",
+                        "example": "Tbilisi"
+                      },
+                      "country": {
+                        "type": "string",
+                        "example": "Georgia"
+                      },
+                      "address": {
+                        "type": "string",
+                        "example": "Rustaveli ave 1"
+                      },
+                      "phone": {
+                        "type": "string",
+                        "example": "+995555123456"
+                      },
+                      "zipcode": {
+                        "type": "string",
+                        "example": "0100"
                       }
                     }
                   }
@@ -1264,20 +2293,67 @@
               "examples": {
                 "singleProduct": {
                   "summary": "Single product order",
-                  "value": { "userOrder": [{ "id": "64f1b2c3d4e5f6a7b8c9d0e1", "quantity": 1 }] }
+                  "value": {
+                    "userOrder": [
+                      {
+                        "id": "64f1b2c3d4e5f6a7b8c9d0e1",
+                        "quantity": 1
+                      }
+                    ],
+                    "userInfo": {
+                      "fullname": "John Doe",
+                      "email": "john@example.com",
+                      "city": "Tbilisi",
+                      "country": "Georgia",
+                      "address": "Rustaveli ave 1",
+                      "phone": "+995555123456",
+                      "zipcode": "0100"
+                    }
+                  }
                 },
                 "multipleProducts": {
                   "summary": "Multiple products",
                   "value": {
                     "userOrder": [
-                      { "id": "64f1b2c3d4e5f6a7b8c9d0e1", "quantity": 2 },
-                      { "id": "64f1b2c3d4e5f6a7b8c9d0e2", "quantity": 1 }
-                    ]
+                      {
+                        "id": "64f1b2c3d4e5f6a7b8c9d0e1",
+                        "quantity": 2
+                      },
+                      {
+                        "id": "64f1b2c3d4e5f6a7b8c9d0e2",
+                        "quantity": 1
+                      }
+                    ],
+                    "userInfo": {
+                      "fullname": "John Doe",
+                      "email": "john@example.com",
+                      "city": "Tbilisi",
+                      "country": "Georgia",
+                      "address": "Rustaveli ave 1",
+                      "phone": "+995555123456",
+                      "zipcode": "0100"
+                    }
                   }
                 },
                 "invalidQuantity": {
                   "summary": "Invalid quantity (float)",
-                  "value": { "userOrder": [{ "id": "64f1b2c3d4e5f6a7b8c9d0e1", "quantity": 1.5 }] }
+                  "value": {
+                    "userOrder": [
+                      {
+                        "id": "64f1b2c3d4e5f6a7b8c9d0e1",
+                        "quantity": 1.5
+                      }
+                    ],
+                    "userInfo": {
+                      "fullname": "John Doe",
+                      "email": "john@example.com",
+                      "city": "Tbilisi",
+                      "country": "Georgia",
+                      "address": "Rustaveli ave 1",
+                      "phone": "+995555123456",
+                      "zipcode": "0100"
+                    }
+                  }
                 }
               }
             }
@@ -1291,14 +2367,27 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "message": { "type": "string", "example": "Session created!" },
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Session created!"
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
-                        "payment": { "$ref": "#/components/schemas/Payment" },
-                        "sessionUrl": { "type": "string", "example": "https://checkout.stripe.com/pay/cs_test_..." },
-                        "sessionId": { "type": "string", "example": "cs_test_a1b2c3..." }
+                        "payment": {
+                          "$ref": "#/components/schemas/Payment"
+                        },
+                        "sessionUrl": {
+                          "type": "string",
+                          "example": "https://checkout.stripe.com/pay/cs_test_..."
+                        },
+                        "sessionId": {
+                          "type": "string",
+                          "example": "cs_test_a1b2c3..."
+                        }
                       }
                     }
                   }
@@ -1310,22 +2399,40 @@
             "description": "Invalid quantity or seller missing Stripe account",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
                 "examples": {
-                  "badQty": { "value": { "status": "fail", "message": "Incorrect quantity!" } },
-                  "noStripe": { "value": { "status": "fail", "message": "All sellers must have a Stripe account connected before checkout." } }
+                  "badQty": {
+                    "value": {
+                      "status": "fail",
+                      "message": "Incorrect quantity!"
+                    }
+                  },
+                  "noStripe": {
+                    "value": {
+                      "status": "fail",
+                      "message": "All sellers must have a Stripe account connected before checkout."
+                    }
+                  }
                 }
               }
             }
           },
-          "404": { "$ref": "#/components/responses/NotFound" },
-          "429": { "$ref": "#/components/responses/TooManyRequests" }
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          }
         }
       }
     },
     "/payment/webhook": {
       "post": {
-        "tags": ["Payments"],
+        "tags": [
+          "Payments"
+        ],
         "summary": "Stripe webhook handler",
         "description": "Receives Stripe webhook events. Uses raw body for signature verification. Handles: checkout.session.completed (marks payment succeeded, creates transfers) and payment_intent.payment_failed.",
         "parameters": [
@@ -1333,7 +2440,9 @@
             "name": "stripe-signature",
             "in": "header",
             "required": true,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Stripe webhook signature header",
             "example": "t=1234567890,v1=abcdef..."
           }
@@ -1342,7 +2451,10 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "type": "object", "description": "Raw Stripe event payload" }
+              "schema": {
+                "type": "object",
+                "description": "Raw Stripe event payload"
+              }
             }
           }
         },
@@ -1351,7 +2463,15 @@
             "description": "Webhook received and processed",
             "content": {
               "application/json": {
-                "schema": { "type": "object", "properties": { "received": { "type": "boolean", "example": true } } }
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "received": {
+                      "type": "boolean",
+                      "example": true
+                    }
+                  }
+                }
               }
             }
           },
@@ -1359,8 +2479,13 @@
             "description": "Invalid webhook signature",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
-                "example": { "status": "fail", "message": "Webhook error: No signatures found matching..." }
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "status": "fail",
+                  "message": "Webhook error: No signatures found matching..."
+                }
               }
             }
           }
@@ -1369,7 +2494,9 @@
     },
     "/search/users": {
       "get": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "Search users by fullname",
         "description": "Case-insensitive regex search on user fullname. **BUG:** queries `name` field but User model uses `fullname` — always returns empty. No input escaping — potential ReDoS.",
         "parameters": [
@@ -1377,7 +2504,9 @@
             "name": "fullname",
             "in": "query",
             "required": false,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "example": "John"
           }
         ],
@@ -1389,9 +2518,24 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "results": { "type": "integer", "example": 3 },
-                    "data": { "type": "object", "properties": { "users": { "type": "array", "items": { "$ref": "#/components/schemas/User" } } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "integer",
+                      "example": 3
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "users": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/User"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1402,7 +2546,9 @@
     },
     "/search/products": {
       "get": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "Search products by title or description",
         "description": "Case-insensitive regex search on both title and description. No input escaping — potential ReDoS.",
         "parameters": [
@@ -1410,7 +2556,9 @@
             "name": "title",
             "in": "query",
             "required": false,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Searches in both title AND description fields",
             "example": "laptop"
           }
@@ -1423,9 +2571,24 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "results": { "type": "integer", "example": 5 },
-                    "data": { "type": "object", "properties": { "products": { "type": "array", "items": { "$ref": "#/components/schemas/Product" } } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "integer",
+                      "example": 5
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "products": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Product"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -1436,7 +2599,9 @@
     },
     "/search/categories": {
       "get": {
-        "tags": ["Search"],
+        "tags": [
+          "Search"
+        ],
         "summary": "Search categories by name or description",
         "description": "Case-insensitive regex search on both name and description. No input escaping — potential ReDoS.",
         "parameters": [
@@ -1444,7 +2609,9 @@
             "name": "name",
             "in": "query",
             "required": false,
-            "schema": { "type": "string" },
+            "schema": {
+              "type": "string"
+            },
             "description": "Searches in both name AND description fields",
             "example": "electronics"
           }
@@ -1457,13 +2624,398 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "status": { "type": "string" },
-                    "results": { "type": "integer", "example": 2 },
-                    "data": { "type": "object", "properties": { "categories": { "type": "array", "items": { "$ref": "#/components/schemas/Category" } } } }
+                    "status": {
+                      "type": "string"
+                    },
+                    "results": {
+                      "type": "integer",
+                      "example": 2
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "categories": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/Category"
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/review/{productId}": {
+      "get": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Get product reviews (public)",
+        "description": "Paginated reviews for a product. Public route (no auth). Note: reviewsCount is the total DB review count, not per-product (bug).",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 12
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Reviews returned"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Create a review",
+        "description": "Creates a Comment + Review and increments product.universal.reviewsCount. Auth required. Rate limited 5/10min. No one-review-per-user constraint.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "content",
+                  "rating"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 100,
+                    "example": "Really solid product, would recommend."
+                  },
+                  "rating": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5,
+                    "example": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Review created"
+          },
+          "400": {
+            "description": "Validation / bad request"
+          },
+          "401": {
+            "description": "Forbidden — wrong owner / role"
+          },
+          "404": {
+            "description": "Not found / token not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded"
+          }
+        }
+      }
+    },
+    "/review/{reviewId}": {
+      "patch": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Edit a review (owner only)",
+        "description": "Owner-only edit. content/rating both optional. Admins cannot edit others' reviews. Rate limited 10/10min.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reviewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "content": {
+                    "type": "string",
+                    "minLength": 5,
+                    "maxLength": 100
+                  },
+                  "rating": {
+                    "type": "number",
+                    "minimum": 1,
+                    "maximum": 5
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Review edited"
+          },
+          "400": {
+            "description": "Validation / bad request"
+          },
+          "401": {
+            "description": "Forbidden — wrong owner / role"
+          },
+          "404": {
+            "description": "Not found / token not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Reviews"
+        ],
+        "summary": "Delete a review (owner or admin)",
+        "description": "Owner or admin can delete. Decrements product.universal.reviewsCount. Rate limited 10/10min.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reviewId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review deleted"
+          },
+          "400": {
+            "description": "Validation / bad request"
+          },
+          "401": {
+            "description": "Forbidden — wrong owner / role"
+          },
+          "404": {
+            "description": "Not found / token not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded"
+          }
+        }
+      }
+    },
+    "/order": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Get my orders",
+        "description": "Returns the authenticated user's own orders (paginated). Note: orderCount is total DB order count, not per-user (bug). There is no create-order endpoint — orders are created by the Stripe webhook after a paid checkout.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 12
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Orders returned"
+          },
+          "404": {
+            "description": "Token not found"
+          }
+        }
+      }
+    },
+    "/order/{orderId}": {
+      "patch": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Change order status (admin only)",
+        "description": "Admin-only. No body validation — invalid status caught by Mongoose enum on save. Rate limited 15/10min.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "status"
+                ],
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "confirmed",
+                      "processing",
+                      "shipped",
+                      "delivered",
+                      "completed",
+                      "canceled",
+                      "refunded",
+                      "partially_refunded"
+                    ],
+                    "example": "shipped"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Status changed"
+          },
+          "400": {
+            "description": "Validation / bad request"
+          },
+          "401": {
+            "description": "Forbidden — wrong owner / role"
+          },
+          "404": {
+            "description": "Not found / token not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Orders"
+        ],
+        "summary": "Delete an order (owner only)",
+        "description": "Owner-only delete (no admin override). Rate limited 10/10min.",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9a-fA-F]{24}$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order deleted"
+          },
+          "400": {
+            "description": "Validation / bad request"
+          },
+          "401": {
+            "description": "Forbidden — wrong owner / role"
+          },
+          "404": {
+            "description": "Not found / token not found"
+          },
+          "429": {
+            "description": "Rate limit exceeded"
           }
         }
       }

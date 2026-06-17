@@ -109,7 +109,37 @@ const paymentSchema = new mongoose.Schema({
     webhookProcessed: {
         type: Boolean, 
         default: false
-    }
+    },
+    userInfo: {
+        fullname: {
+            type: String,
+            required: [true, "User fullname is required!"]
+        },
+        email: {
+            type: String,
+            required: [true, "User email is required!"]
+        },
+        city: {
+            type: String,
+            required: [true, "User city is required!"]
+        },
+        country: {
+            type: String,
+            required: [true, "User country is required!"]
+        },
+        address: {
+            type: String,
+            required: [true, "User address is required!"]
+        },
+        phone: {
+            type: String,
+            required: [true, "User phone number is required!"]
+        },
+        zipcode: {
+            type: Number,
+            required: [true, "Zipcode is required!"]
+        }
+    },
 }, { timestamps: true });
 
 // Indexing

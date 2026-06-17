@@ -32,6 +32,8 @@ const chatRouter = require("./routers/chat.router");
 const messageRouter = require("./routers/message.router");
 const userRouter = require("./routers/user.router");
 const paymentRouter = require("./routers/payment.router");
+const reviewRouter = require("./routers/review.router");
+const orderRouter = require("./routers/order.router");
 
 // ---------------------------------------IMPORTS---------------------------------------
 
@@ -77,6 +79,8 @@ app.use("/api/v1/chat", chatRouter);
 app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/payment", paymentRouter);
+app.use("/api/v1/review", reviewRouter);
+app.use("/api/v1/order", orderRouter);
 
 // Global Error handler
 app.use(globalErrorHandler);

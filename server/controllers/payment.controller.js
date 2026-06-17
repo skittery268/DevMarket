@@ -1,4 +1,5 @@
 // Models
+const Order = require('../models/order.model');
 const Payment = require('../models/payment.model');
 const Product = require('../models/product.model');
 const User = require('../models/user.model');
@@ -14,7 +15,7 @@ const stripe = require('stripe')(process.env.SECRET_STRIPE_KEY);
 
 // Create session
 const createCheckoutSession = catchAsync(async (req, res, next) => {
-    const { userOrder } = req.body;
+    const { userOrder, userInfo } = req.body;
 
     const productsIds = userOrder.map(p => p.id);
 
@@ -106,7 +107,8 @@ const createCheckoutSession = catchAsync(async (req, res, next) => {
         platformCommission,
         sellerNetAmount,
         sellerDistributions: orderDistributions,
-        status: "pending"
+        status: "pending",
+        userInfo
     });
 
     res.status(201).json({
@@ -143,6 +145,31 @@ const stripeWebhook = async (req, res, next) => {
             return res.status(200).json({ received: true });
         }
 
+        if (payment.status === "succeeded") {
+            return res.status(200).json({ received: true });
+        }
+        
+        const userInfo = payment.userInfo;
+        
+        const products = [];
+
+        for (const distribution of payment.sellerDistributions) {
+            products.push({
+                productId: distribution.productId,
+                sellerId: distribution.sellerId,
+                quantity: distribution.quantity,
+                itemTotal: distribution.itemTotal
+            });
+        };
+        
+        const order = await Order.create({ 
+            userId: payment.userId, 
+            userInfo, 
+            products, 
+            totalAmount: payment.totalAmount,
+            paymentId: payment._id
+        });
+        
         for (const distribution of payment.sellerDistributions) {
             const product = await Product.findById(distribution.productId);
             
@@ -151,22 +178,22 @@ const stripeWebhook = async (req, res, next) => {
             };
 
             product.universal.stock = product.universal.stock - distribution.quantity;
-
+            
             await product.save();
-
+            
             if (product.universal.stock <= 0) {
                 await Product.findByIdAndDelete(distribution.productId);
             };
-        }
-
+        };
+        
         payment.status = "succeeded";
         payment.stripePaymentIntentId = session.payment_intent;
         payment.webhookProcessed = true;
-
+        
         // const transfersBySeller = payment.sellerDistributions.reduce((acc, item) => {
-        //     const key = item.sellerStripeAccountId;
-
-        //     if (!acc[key]) {
+            //     const key = item.sellerStripeAccountId;
+            
+            //     if (!acc[key]) {
         //         acc[key] = {
         //             sellerId: item.sellerId,
         //             stripeAccountId: item.sellerStripeAccountId,
