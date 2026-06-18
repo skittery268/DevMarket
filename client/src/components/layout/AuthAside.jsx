@@ -11,7 +11,7 @@ const POINTS = [
 // Decorative brand panel shown next to the auth forms on large screens.
 function AuthAside({ image, title, text }) {
   return (
-    <div className="relative hidden overflow-hidden bg-brand-gradient lg:block">
+    <div className="relative hidden overflow-hidden bg-brand-gradient h-full lg:block">
       {image && (
         <img src={image} alt="" className="absolute inset-0 size-full object-cover opacity-20" />
       )}
