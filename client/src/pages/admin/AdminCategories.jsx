@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { FolderPlus, LayoutGrid, Pencil, Plus, Trash2 } from "lucide-react";
 
 import { useCategory } from "@/hooks/useCategory";
@@ -36,9 +37,9 @@ function AdminCategories() {
   const handleDelete = async (id) => {
     try {
       await deleteCategory(id);
-      console.log("Category deleted");
+      toast.success("Category deleted");
     } catch (err) {
-      console.error(apiError(err, "Could not delete category"));
+      toast.error(apiError(err, "Could not delete category"));
     }
   };
 

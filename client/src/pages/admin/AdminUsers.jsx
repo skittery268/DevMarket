@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { BadgeCheck, ShieldAlert, Trash2, Users } from "lucide-react";
 
 import { useUser } from "@/hooks/useUser";
@@ -52,18 +53,18 @@ function AdminUsers() {
   const handleRole = async (id, role) => {
     try {
       await changeRole(id, role);
-      console.log("Role updated");
+      toast.success("Role updated");
     } catch (err) {
-      console.error(apiError(err, "Could not change role"));
+      toast.error(apiError(err, "Could not change role"));
     }
   };
 
   const handleDelete = async (id) => {
     try {
       await deleteUser(id);
-      console.log("User deleted");
+      toast.success("User deleted");
     } catch (err) {
-      console.error(apiError(err, "Could not delete user"));
+      toast.error(apiError(err, "Could not delete user"));
     }
   };
 

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
+import { toast } from "react-toastify";
 import { MessageSquare, Pencil, Send, Trash2, X } from "lucide-react";
 
 import { useReview } from "@/hooks/useReview";
@@ -102,7 +103,7 @@ function ProductReviews({ productId }) {
       await deleteReview(reviewId);
       if (editingId === reviewId) resetForm();
     } catch (err) {
-      console.error(apiError(err, "Could not delete review"));
+      toast.error(apiError(err, "Could not delete review"));
     }
   };
 

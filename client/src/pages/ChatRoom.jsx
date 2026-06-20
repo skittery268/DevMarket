@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useLocation, Link } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
 import {
   ArrowLeft,
   Check,
@@ -117,7 +118,7 @@ function ChatRoom() {
     try {
       await sendMessage({ chatId, content });
     } catch (err) {
-      console.error(apiError(err, "Message not sent"));
+      toast.error(apiError(err, "Message not sent"));
     }
   };
 
@@ -129,7 +130,7 @@ function ChatRoom() {
       setEditingId(null);
       setEditText("");
     } catch (err) {
-      console.error(apiError(err, "Could not edit message"));
+      toast.error(apiError(err, "Could not edit message"));
     }
   };
 
@@ -137,7 +138,7 @@ function ChatRoom() {
     try {
       await deleteMessage(id);
     } catch (err) {
-      console.error(apiError(err, "Could not delete message"));
+      toast.error(apiError(err, "Could not delete message"));
     }
   };
 

@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { toast } from "react-toastify";
 import { Heart, Trash2 } from "lucide-react";
 
 import { useWishlist } from "@/hooks/useWishlist";
@@ -24,7 +25,7 @@ function Wishlist() {
               variant="outline"
               onClick={() => {
                 clearWishlist();
-                console.log("Wishlist cleared");
+                toast.success("Wishlist cleared");
               }}
             >
               <Trash2 /> Clear all

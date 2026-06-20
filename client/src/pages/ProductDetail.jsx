@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate, Link } from "react-router";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import {
   Heart,
   MessageCircle,
@@ -97,7 +98,7 @@ function ProductDetail() {
   const handleAdd = () => {
     if (outOfStock) return;
     addToCart(product, qty);
-    console.log("Added to cart", { description: `${qty} × ${u.title}` });
+    toast.success(`Added to cart — ${qty} × ${u.title}`);
   };
 
   const handleMessageSeller = async () => {
@@ -110,7 +111,7 @@ function ProductDetail() {
       const chat = await createChat({ productId: product._id, sellerId });
       if (chat?._id) navigate(`/chats/${chat._id}`);
     } catch (err) {
-      console.error(apiError(err, "Could not start a chat"));
+      toast.error(apiError(err, "Could not start a chat"));
     } finally {
       setMessaging(false);
     }
@@ -212,7 +213,7 @@ function ProductDetail() {
                 variant="outline"
                 onClick={() => {
                   toggleWishlist(product);
-                  console.log(wished ? "Removed from wishlist" : "Saved to wishlist");
+                  toast.success(wished ? "Removed from wishlist" : "Saved to wishlist");
                 }}
               >
                 <Heart className={cn("size-5", wished && "fill-destructive text-destructive")} />

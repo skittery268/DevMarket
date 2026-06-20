@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { Heart, ShoppingCart, Store } from "lucide-react";
 
 import { useCart } from "@/hooks/useCart";
@@ -24,13 +25,13 @@ function ProductCard({ product }) {
     e.preventDefault();
     if (outOfStock) return;
     addToCart(product, 1);
-    console.log("Added to cart", { description: u.title });
+    toast.success(`Added to cart — ${u.title}`);
   };
 
   const handleWish = (e) => {
     e.preventDefault();
     toggleWishlist(product);
-    console.log(wished ? "Removed from wishlist" : "Saved to wishlist", { description: u.title });
+    toast.success(`${wished ? "Removed from wishlist" : "Saved to wishlist"} — ${u.title}`);
   };
 
   return (

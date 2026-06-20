@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { MessageSquare, Trash2, ChevronRight } from "lucide-react";
 
 import { useChat } from "@/hooks/useChat";
@@ -36,9 +37,9 @@ function Chats() {
     e.preventDefault();
     try {
       await deleteChat(id);
-      console.log("Conversation deleted");
+      toast.success("Conversation deleted");
     } catch (err) {
-      console.error(apiError(err, "Could not delete chat"));
+      toast.error(apiError(err, "Could not delete chat"));
     }
   };
 

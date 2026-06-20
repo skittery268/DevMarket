@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate } from "react-router";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { Eye, EyeOff, UserPlus } from "lucide-react";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -33,9 +34,9 @@ const Register = () => {
     setLoading(true);
     try {
       await register(data);
-      console.log("Account created!", { description: "Please sign in to continue." });
+      toast.success("Account created! Please sign in to continue.");
     } catch (err) {
-      console.error(apiError(err, "Could not create your account"));
+      toast.error(apiError(err, "Could not create your account"));
     } finally {
       setLoading(false);
     }

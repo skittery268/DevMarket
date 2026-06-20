@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router";
 import { motion } from "framer-motion";
+import { toast } from "react-toastify";
 import { ExternalLink, Package, Pencil, Plus, Store, Trash2 } from "lucide-react";
 
 import { useProduct } from "@/hooks/useProduct";
@@ -53,9 +54,9 @@ function SellerProducts() {
   const handleDelete = async (id) => {
     try {
       await deleteProduct(id);
-      console.log("Product deleted");
+      toast.success("Product deleted");
     } catch (err) {
-      console.error(apiError(err, "Could not delete product"));
+      toast.error(apiError(err, "Could not delete product"));
     }
   };
 

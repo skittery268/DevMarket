@@ -26,6 +26,9 @@ import { SearchProvider } from './providers/SearchProvider.jsx';
 import { PaymentProvider } from './providers/PaymentProvider.jsx';
 import { ReviewProvider } from './providers/ReviewProvider.jsx';
 
+// React toastify
+import { ToastContainer } from 'react-toastify';
+
 // ---------------------------------------IMPORTS---------------------------------------
 
 createRoot(document.getElementById('root')).render(
@@ -45,6 +48,7 @@ createRoot(document.getElementById('root')).render(
                           <ReviewProvider>
                             <ScrollToTop />
                             <App />
+                            <ToastContainer position='bottom-right' />
                           </ReviewProvider>
                         </PaymentProvider>
                       </SearchProvider>

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 import {
   LayoutDashboard,
   LogOut,
@@ -32,9 +33,9 @@ function UserMenu() {
   const handleLogout = async () => {
     try {
       await logout();
-      console.log("Signed out");
+      toast.success("Signed out");
     } catch (err) {
-      console.error(apiError(err, "Could not sign out"));
+      toast.error(apiError(err, "Could not sign out"));
     }
   };
 
